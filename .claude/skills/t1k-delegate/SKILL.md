@@ -6,7 +6,7 @@ argument-hint: "<role> \"<task>\" [--model <model>] [--profile <profile>]"
 effort: low
 version: 0.1.0
 origin: theonekit-model-router
-repository: The1Studio/model-router
+repository: The1Studio/theonekit-model-router
 module: mr-router
 protected: true
 ---

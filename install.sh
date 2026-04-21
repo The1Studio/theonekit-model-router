@@ -62,7 +62,7 @@ else
     ok "Updated: $SRC"
   else
     mkdir -p "$(dirname "$SRC")"
-    git clone --quiet https://github.com/The1Studio/model-router.git "$SRC"
+    git clone --quiet https://github.com/The1Studio/theonekit-model-router.git "$SRC"
     ok "Cloned: $SRC"
   fi
   cd "$SRC"
@@ -193,4 +193,4 @@ echo "  1. Set API key: export OC_GO_CC_API_KEY=sk-your-key"
 echo "  2. Start proxy: oc-go-cc serve --background"
 echo "  3. Or let mr-delegate.sh auto-start the proxy"
 echo ""
-echo "Docs: https://github.com/The1Studio/model-router/wiki"
+echo "Docs: https://github.com/The1Studio/theonekit-model-router/wiki"

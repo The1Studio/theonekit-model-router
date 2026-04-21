@@ -79,7 +79,7 @@
   },
   "_origin": {
     "kit": "theonekit-model-router",
-    "repository": "The1Studio/model-router",
+    "repository": "The1Studio/theonekit-model-router",
     "module": "mr-router",
     "protected": true
   }

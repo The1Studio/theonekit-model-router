@@ -4,7 +4,7 @@
   "description": "Multi-model subagent system for Claude Code — delegate tasks to any AI model with full CC context inheritance",
   "repository": {
     "type": "git",
-    "url": "https://github.com/The1Studio/model-router.git"
+    "url": "https://github.com/The1Studio/theonekit-model-router.git"
   },
   "keywords": [
     "claude-code",

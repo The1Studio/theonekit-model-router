@@ -42,7 +42,7 @@ Instead of building a proxy that intercepts Claude Code's API calls (which risks
 
 ## Quick Links
 
-- [GitHub Repository](https://github.com/The1Studio/model-router)
+- [GitHub Repository](https://github.com/The1Studio/theonekit-model-router)
 - [CCS (Claude Code Switch)](https://github.com/kaitranntt/ccs)
 - [Claude Code Subagents Docs](https://code.claude.com/docs/en/sub-agents)
 - [Claude Code Headless Mode](https://code.claude.com/docs/en/headless)
