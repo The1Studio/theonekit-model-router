@@ -1,0 +1,34 @@
+{
+  "registryVersion": 2,
+  "kitName": "theonekit-model-router",
+  "_modulesGeneratedFrom": "module.json files — edit modules/*/module.json instead",
+  "modules": {
+    "mr-router": {
+      "description": "Multi-model subagent delegation — route tasks to cheap models via OpenCode Go",
+      "required": true,
+      "dependencies": [],
+      "skills": [
+        "mr-delegate"
+      ],
+      "agents": [
+        "mr-explorer-fast",
+        "mr-doc-scout",
+        "mr-doc-writer",
+        "mr-coder-cheap",
+        "mr-reviewer-deep",
+        "mr-tester"
+      ],
+      "activationFragment": "t1k-activation-mr.json",
+      "routingOverlay": "t1k-routing-mr.json"
+    }
+  },
+  "presets": {
+    "full": "*"
+  },
+  "_origin": {
+    "kit": "theonekit-model-router",
+    "repository": "The1Studio/model-router",
+    "module": null,
+    "protected": true
+  }
+}

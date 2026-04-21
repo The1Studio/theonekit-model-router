@@ -1,0 +1,81 @@
+{
+  "name": "mr-router",
+  "version": "0.1.0",
+  "kit": "theonekit-model-router",
+  "description": "Multi-model subagent delegation — route tasks to cheap models via OpenCode Go",
+  "required": true,
+  "dependencies": {},
+  "crossKitDependencies": {},
+  "files": {
+    "scripts": [
+      "mr-delegate.sh"
+    ],
+    "hooks": [
+      "mr-spawn-guard.cjs",
+      "mr-metrics.cjs"
+    ],
+    "fragments": [
+      "t1k-config-mr.json",
+      "t1k-activation-mr.json",
+      "t1k-routing-mr.json"
+    ]
+  },
+  "skills": [
+    "mr-delegate"
+  ],
+  "agents": [
+    "mr-explorer-fast",
+    "mr-doc-scout",
+    "mr-doc-writer",
+    "mr-coder-cheap",
+    "mr-reviewer-deep",
+    "mr-tester"
+  ],
+  "activation": {
+    "sessionBaseline": [],
+    "mappings": [
+      {
+        "keywords": ["delegate to cheap model", "use cheap model", "delegate to opencode", "use opencode go"],
+        "skills": ["mr-delegate"]
+      },
+      {
+        "keywords": ["explore cheap", "find files cheap", "explore with opencode"],
+        "skills": ["mr-delegate"]
+      },
+      {
+        "keywords": ["review cheap", "security review cheap", "deep review cheap"],
+        "skills": ["mr-delegate"]
+      },
+      {
+        "keywords": ["code cheap", "implement cheap", "boilerplate"],
+        "skills": ["mr-delegate"]
+      },
+      {
+        "keywords": ["audit docs", "scan documentation"],
+        "skills": ["mr-delegate"]
+      },
+      {
+        "keywords": ["write docs cheap", "update docs cheap"],
+        "skills": ["mr-delegate"]
+      },
+      {
+        "keywords": ["run tests cheap", "test with cheap model"],
+        "skills": ["mr-delegate"]
+      }
+    ]
+  },
+  "routingOverlay": {
+    "explorer": "mr-explorer-fast",
+    "reviewer": "mr-reviewer-deep",
+    "doc-writer": "mr-doc-writer",
+    "doc-scout": "mr-doc-scout",
+    "coder": "mr-coder-cheap",
+    "tester": "mr-tester"
+  },
+  "_origin": {
+    "kit": "theonekit-model-router",
+    "repository": "The1Studio/model-router",
+    "module": "mr-router",
+    "protected": true
+  }
+}
