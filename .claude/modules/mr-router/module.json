@@ -8,11 +8,14 @@
   "crossKitDependencies": {},
   "files": {
     "scripts": [
-      "mr-delegate.sh"
+      "mr-delegate.sh",
+      "post-install.sh",
+      "mr-doctor.sh"
     ],
     "hooks": [
       "mr-spawn-guard.cjs",
-      "mr-metrics.cjs"
+      "mr-metrics.cjs",
+      "mr-update-check.cjs"
     ],
     "fragments": [
       "t1k-config-mr.json",
@@ -20,6 +23,8 @@
       "t1k-routing-mr.json"
     ]
   },
+  "postInstall": "scripts/post-install.sh",
+  "doctor": "scripts/mr-doctor.sh",
   "skills": [
     "mr-delegate"
   ],

@@ -1,0 +1,29 @@
+{
+  "name": "@the1studio/theonekit-model-router",
+  "version": "0.1.0",
+  "description": "Multi-model subagent system for Claude Code — delegate tasks to any AI model with full CC context inheritance",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/The1Studio/model-router.git"
+  },
+  "keywords": [
+    "claude-code",
+    "theonekit",
+    "model-router",
+    "multi-model",
+    "subagent",
+    "opencode-go",
+    "ccs"
+  ],
+  "author": "The1Studio",
+  "license": "MIT",
+  "peerDependencies": {
+    "@kaitranntt/ccs": ">=7.50.0"
+  },
+  "theonekit": {
+    "kitName": "theonekit-model-router",
+    "modulesFile": ".claude/t1k-modules.json",
+    "postInstall": "scripts/post-install.sh",
+    "doctor": "scripts/mr-doctor.sh"
+  }
+}
