@@ -1,0 +1,15 @@
+name: Quality Gates
+
+on:
+  pull_request:
+    paths:
+      - '.claude/**'
+      - '.github/workflows/quality-gates.yml'
+  push:
+    branches: [main]
+    paths:
+      - '.claude/**'
+
+jobs:
+  gates:
+    uses: The1Studio/theonekit-release-action/.github/workflows/t1k-quality-gates.yml@v2

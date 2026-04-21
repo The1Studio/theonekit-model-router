@@ -1,0 +1,18 @@
+{
+  "branches": ["main"],
+  "plugins": [
+    ["@semantic-release/commit-analyzer", { "preset": "conventionalcommits" }],
+    ["@semantic-release/release-notes-generator", { "preset": "conventionalcommits" }],
+    ["@semantic-release/changelog", { "changelogFile": "CHANGELOG.md" }],
+    ["@semantic-release/exec", {
+      "prepareCmd": "node -e \"const fs=require('fs'); const p=JSON.parse(fs.readFileSync('package.json','utf8')); p.version='${nextRelease.version}'; fs.writeFileSync('package.json',JSON.stringify(p,null,2)+'\\n'); const mp='.claude/metadata.json'; if(fs.existsSync(mp)){const m=JSON.parse(fs.readFileSync(mp,'utf8')); m.version='${nextRelease.version}'; m.buildDate=new Date().toISOString(); fs.writeFileSync(mp,JSON.stringify(m,null,2)+'\\n');} console.log('[semantic-release] Updated version to ${nextRelease.version}');\""
+    }],
+    ["@semantic-release/git", {
+      "assets": ["package.json", "CHANGELOG.md", ".claude/metadata.json"],
+      "message": "chore(release): ${nextRelease.version}"
+    }],
+    ["@semantic-release/github", {
+      "assets": [{ "path": "dist/theonekit-model-router.zip", "label": "theonekit-model-router.zip" }]
+    }]
+  ]
+}

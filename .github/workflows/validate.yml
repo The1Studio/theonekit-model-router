@@ -1,0 +1,52 @@
+name: Validate
+on:
+  pull_request:
+    branches: [main]
+  push:
+    branches: [main]
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Validate JSON files
+        run: |
+          for f in .claude/t1k-modules.json .claude/modules/mr-router/module.json .claude/metadata.json .claude/settings.json fragments/*.json package.json; do
+            python3 -c "import json; json.load(open('$f'))" && echo "OK: $f" || { echo "FAIL: $f"; exit 1; }
+          done
+
+      - name: Validate shell scripts
+        run: |
+          bash -n scripts/mr-delegate.sh && echo "OK: mr-delegate.sh"
+          bash -n scripts/post-install.sh && echo "OK: post-install.sh"
+          bash -n scripts/mr-doctor.sh && echo "OK: mr-doctor.sh"
+
+      - name: Validate hook scripts
+        run: |
+          node -c .claude/hooks/mr-spawn-guard.cjs && echo "OK: mr-spawn-guard.cjs"
+          node -c .claude/hooks/mr-metrics.cjs && echo "OK: mr-metrics.cjs"
+          node -c .claude/hooks/mr-update-check.cjs && echo "OK: mr-update-check.cjs"
+
+      - name: Validate naming conventions
+        run: |
+          # Skill dir must be t1k-*
+          ls .claude/skills/t1k-delegate/SKILL.md || { echo "FAIL: skill dir naming"; exit 1; }
+          # Agents must be mr-*
+          for f in .claude/agents/*.md; do
+            basename "$f" | grep -q "^mr-" || { echo "FAIL: agent naming $f"; exit 1; }
+          done
+          echo "OK: naming conventions"
+
+      - name: Validate registry consistency
+        run: |
+          python3 -c "
+          import json
+          reg = json.load(open('.claude/t1k-modules.json'))
+          mod = json.load(open('.claude/modules/mr-router/module.json'))
+          assert reg['modules']['mr-router']['skills'] == mod['skills'], 'Skills mismatch'
+          assert reg['modules']['mr-router']['agents'] == mod['agents'], 'Agents mismatch'
+          for a in reg['modules']['mr-router']['agents']:
+              assert open(f'.claude/agents/{a}.md'), f'Agent {a} missing'
+          print('OK: registry consistent')
+          "

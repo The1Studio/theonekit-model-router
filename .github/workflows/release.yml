@@ -1,0 +1,15 @@
+name: Release
+on:
+  push:
+    branches: [main]
+jobs:
+  release:
+    uses: The1Studio/theonekit-release-action/.github/workflows/release.yml@v2
+    with:
+      kit-name: 'TheOneKit Model Router'
+      zip-name: 'theonekit-model-router.zip'
+      release-mode: 'modules'
+      modular: true
+      modules-file: '.claude/t1k-modules.json'
+    secrets:
+      discord-webhook-url: ${{ secrets.DISCORD_RELEASE_WEBHOOK }}
