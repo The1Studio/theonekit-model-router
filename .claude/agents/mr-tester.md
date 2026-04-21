@@ -1,5 +1,6 @@
 ---
 name: mr-tester
+model: inherit
 description: Run the project's test suite and interpret results. Does not write tests.
 tools: [Read, Grep, Glob, Bash]
 permissionMode: plan

@@ -1,5 +1,6 @@
 ---
 name: mr-explorer-fast
+model: inherit
 description: Quick read-only codebase exploration. Reports paths and entry points concisely.
 tools: [Read, Grep, Glob]
 permissionMode: plan

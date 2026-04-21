@@ -1,5 +1,6 @@
 ---
 name: mr-reviewer-deep
+model: inherit
 description: Read-only code review with Bash access for lint/grep/compile checks.
 tools: [Read, Grep, Glob, Bash]
 permissionMode: plan

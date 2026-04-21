@@ -1,5 +1,6 @@
 ---
 name: mr-coder-cheap
+model: inherit
 description: Implement code changes per a plan. Never designs or refactors beyond the task.
 tools: [Read, Grep, Glob, Edit, Write, Bash]
 permissionMode: acceptEdits

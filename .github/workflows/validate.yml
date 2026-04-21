@@ -12,7 +12,7 @@ jobs:
 
       - name: Validate JSON files
         run: |
-          for f in .claude/t1k-modules.json .claude/modules/mr-router/module.json .claude/metadata.json .claude/settings.json fragments/*.json package.json; do
+          for f in .claude/t1k-modules.json .claude/modules/mr-router/module.json .claude/metadata.json .claude/settings.json .claude/t1k-activation-mr.json .claude/t1k-config-mr.json .claude/t1k-routing-mr.json package.json; do
             python3 -c "import json; json.load(open('$f'))" && echo "OK: $f" || { echo "FAIL: $f"; exit 1; }
           done
 
