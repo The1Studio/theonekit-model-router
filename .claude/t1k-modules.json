@@ -18,8 +18,15 @@
         "mr-reviewer-deep",
         "mr-tester"
       ],
-      "activationFragment": "t1k-activation-mr.json",
-      "routingOverlay": "t1k-routing-mr.json"
+      "activationFragment": "t1k-activation-mr-router.json",
+      "routingOverlay": {
+        "explorer": "mr-explorer-fast",
+        "reviewer": "mr-reviewer-deep",
+        "doc-writer": "mr-doc-writer",
+        "doc-scout": "mr-doc-scout",
+        "coder": "mr-coder-cheap",
+        "tester": "mr-tester"
+      }
     }
   },
   "presets": {
@@ -29,6 +36,6 @@
     "kit": "theonekit-model-router",
     "repository": "The1Studio/theonekit-model-router",
     "module": null,
-    "protected": true
+    "protected": false
   }
 }

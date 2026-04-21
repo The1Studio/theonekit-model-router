@@ -1,4 +1,5 @@
 #!/usr/bin/env node
+// t1k-origin: kit=theonekit-model-router | repo=The1Studio/theonekit-model-router | module=null | protected=false
 // mr-spawn-guard.cjs — P0 safety hook
 // Prevents delegated sessions from re-entering model-router delegation.
 // Registered as PreToolUse hook matching "Bash" in spawned sessions.

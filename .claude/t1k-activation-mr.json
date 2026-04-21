@@ -1,38 +1,94 @@
 {
   "activations": [
     {
-      "keywords": ["delegate to cheap model", "use cheap model", "delegate to opencode", "use opencode go"],
+      "keywords": [
+        "delegate to cheap model",
+        "use cheap model",
+        "delegate to opencode",
+        "use opencode go"
+      ],
       "skill": "t1k-delegate"
     },
     {
-      "keywords": ["explore with gemini", "explore cheap", "find files cheap"],
+      "keywords": [
+        "explore with gemini",
+        "explore cheap",
+        "find files cheap"
+      ],
       "skill": "t1k-delegate",
       "role": "mr-explorer-fast"
     },
     {
-      "keywords": ["review with glm", "deep review cheap", "security review cheap"],
+      "keywords": [
+        "review with glm",
+        "deep review cheap",
+        "security review cheap"
+      ],
       "skill": "t1k-delegate",
       "role": "mr-reviewer-deep"
     },
     {
-      "keywords": ["code with cheap model", "implement cheap", "boilerplate"],
+      "keywords": [
+        "code with cheap model",
+        "implement cheap",
+        "boilerplate"
+      ],
       "skill": "t1k-delegate",
       "role": "mr-coder-cheap"
     },
     {
-      "keywords": ["audit docs", "scan documentation"],
+      "keywords": [
+        "audit docs",
+        "scan documentation"
+      ],
       "skill": "t1k-delegate",
       "role": "mr-doc-scout"
     },
     {
-      "keywords": ["write docs cheap", "update docs cheap"],
+      "keywords": [
+        "write docs cheap",
+        "update docs cheap"
+      ],
       "skill": "t1k-delegate",
       "role": "mr-doc-writer"
     },
     {
-      "keywords": ["run tests cheap", "test with cheap model"],
+      "keywords": [
+        "run tests cheap",
+        "test with cheap model"
+      ],
       "skill": "t1k-delegate",
       "role": "mr-tester"
     }
-  ]
+  ],
+  "_generated": "2026-04-21T19:37:53.170Z",
+  "_generatedBy": "generate-activation-from-skills.cjs",
+  "_generatedFrom": "SKILL.md keywords: frontmatter — edit skills/*/SKILL.md instead of this file",
+  "mappings": [
+    {
+      "keywords": [
+        "delegate",
+        "cheap model",
+        "opencode",
+        "route",
+        "subagent",
+        "explore cheap",
+        "review cheap",
+        "code cheap",
+        "test cheap",
+        "delegate to cheap",
+        "use cheap model",
+        "use opencode go"
+      ],
+      "skills": [
+        "t1k-delegate"
+      ]
+    }
+  ],
+  "_origin": {
+    "kit": "theonekit-model-router",
+    "repository": "The1Studio/theonekit-model-router",
+    "module": null,
+    "protected": false
+  }
 }
