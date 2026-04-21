@@ -8,6 +8,7 @@ jobs:
     with:
       kit-name: 'TheOneKit Model Router'
       zip-name: 'theonekit-model-router.zip'
+      discord-thread-id: '1496231529041625179'
       release-mode: 'modules'
       modular: true
       modules-file: '.claude/t1k-modules.json'
