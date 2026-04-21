@@ -26,7 +26,7 @@
   "postInstall": "scripts/post-install.sh",
   "doctor": "scripts/mr-doctor.sh",
   "skills": [
-    "mr-delegate"
+    "t1k-delegate"
   ],
   "agents": [
     "mr-explorer-fast",
@@ -41,31 +41,31 @@
     "mappings": [
       {
         "keywords": ["delegate to cheap model", "use cheap model", "delegate to opencode", "use opencode go"],
-        "skills": ["mr-delegate"]
+        "skills": ["t1k-delegate"]
       },
       {
         "keywords": ["explore cheap", "find files cheap", "explore with opencode"],
-        "skills": ["mr-delegate"]
+        "skills": ["t1k-delegate"]
       },
       {
         "keywords": ["review cheap", "security review cheap", "deep review cheap"],
-        "skills": ["mr-delegate"]
+        "skills": ["t1k-delegate"]
       },
       {
         "keywords": ["code cheap", "implement cheap", "boilerplate"],
-        "skills": ["mr-delegate"]
+        "skills": ["t1k-delegate"]
       },
       {
         "keywords": ["audit docs", "scan documentation"],
-        "skills": ["mr-delegate"]
+        "skills": ["t1k-delegate"]
       },
       {
         "keywords": ["write docs cheap", "update docs cheap"],
-        "skills": ["mr-delegate"]
+        "skills": ["t1k-delegate"]
       },
       {
         "keywords": ["run tests cheap", "test with cheap model"],
-        "skills": ["mr-delegate"]
+        "skills": ["t1k-delegate"]
       }
     ]
   },

@@ -2,36 +2,36 @@
   "activations": [
     {
       "keywords": ["delegate to cheap model", "use cheap model", "delegate to opencode", "use opencode go"],
-      "skill": "mr-delegate"
+      "skill": "t1k-delegate"
     },
     {
       "keywords": ["explore with gemini", "explore cheap", "find files cheap"],
-      "skill": "mr-delegate",
+      "skill": "t1k-delegate",
       "role": "mr-explorer-fast"
     },
     {
       "keywords": ["review with glm", "deep review cheap", "security review cheap"],
-      "skill": "mr-delegate",
+      "skill": "t1k-delegate",
       "role": "mr-reviewer-deep"
     },
     {
       "keywords": ["code with cheap model", "implement cheap", "boilerplate"],
-      "skill": "mr-delegate",
+      "skill": "t1k-delegate",
       "role": "mr-coder-cheap"
     },
     {
       "keywords": ["audit docs", "scan documentation"],
-      "skill": "mr-delegate",
+      "skill": "t1k-delegate",
       "role": "mr-doc-scout"
     },
     {
       "keywords": ["write docs cheap", "update docs cheap"],
-      "skill": "mr-delegate",
+      "skill": "t1k-delegate",
       "role": "mr-doc-writer"
     },
     {
       "keywords": ["run tests cheap", "test with cheap model"],
-      "skill": "mr-delegate",
+      "skill": "t1k-delegate",
       "role": "mr-tester"
     }
   ]

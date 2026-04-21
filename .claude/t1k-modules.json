@@ -8,7 +8,7 @@
       "required": true,
       "dependencies": [],
       "skills": [
-        "mr-delegate"
+        "t1k-delegate"
       ],
       "agents": [
         "mr-explorer-fast",
