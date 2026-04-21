@@ -1,0 +1,13 @@
+{
+  "routing": {
+    "description": "Maps T1K command roles to model-router agent roles. Only active when modelRouter.mode is 'transparent'.",
+    "mappings": {
+      "explorer": "mr-explorer-fast",
+      "reviewer": "mr-reviewer-deep",
+      "doc-writer": "mr-doc-writer",
+      "doc-scout": "mr-doc-scout",
+      "coder": "mr-coder-cheap",
+      "tester": "mr-tester"
+    }
+  }
+}

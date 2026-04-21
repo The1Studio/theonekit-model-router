@@ -1,0 +1,13 @@
+{
+  "modelRouter": {
+    "enabled": false,
+    "mode": "explicit",
+    "proxy": {
+      "binary": "oc-go-cc",
+      "port": 3456,
+      "autoStart": true
+    },
+    "roleOverrides": {},
+    "budgetOverrides": {}
+  }
+}

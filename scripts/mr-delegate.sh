@@ -37,42 +37,42 @@ case "$ROLE" in
     MODEL="${OVERRIDE_MODEL:-qwen3.5-plus}"
     MODE="plan"
     TURNS=30
-    BUDGET="1.00"
+    BUDGET="5.00"
     ;;
   mr-doc-scout)
     PROFILE="${OVERRIDE_PROFILE:-opencode-go}"
     MODEL="${OVERRIDE_MODEL:-kimi-k2.5}"
     MODE="plan"
     TURNS=25
-    BUDGET="1.00"
+    BUDGET="5.00"
     ;;
   mr-doc-writer)
     PROFILE="${OVERRIDE_PROFILE:-opencode-go}"
     MODEL="${OVERRIDE_MODEL:-kimi-k2.6}"
     MODE="acceptEdits"
     TURNS=50
-    BUDGET="2.00"
+    BUDGET="10.00"
     ;;
   mr-coder-cheap)
     PROFILE="${OVERRIDE_PROFILE:-opencode-go}"
     MODEL="${OVERRIDE_MODEL:-kimi-k2.6}"
     MODE="acceptEdits"
     TURNS=50
-    BUDGET="2.00"
+    BUDGET="10.00"
     ;;
   mr-reviewer-deep)
     PROFILE="${OVERRIDE_PROFILE:-opencode-go}"
     MODEL="${OVERRIDE_MODEL:-glm-5.1}"
     MODE="plan"
     TURNS=40
-    BUDGET="5.00"
+    BUDGET="10.00"
     ;;
   mr-tester)
     PROFILE="${OVERRIDE_PROFILE:-opencode-go}"
     MODEL="${OVERRIDE_MODEL:-qwen3.5-plus}"
     MODE="plan"
     TURNS=30
-    BUDGET="0.50"
+    BUDGET="5.00"
     ;;
   *)
     echo "Unknown role: $ROLE" >&2
