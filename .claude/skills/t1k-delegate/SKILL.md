@@ -4,11 +4,11 @@ description: "Delegate tasks to cheaper/specialized AI models via OpenCode Go. U
 keywords: [delegate, cheap model, opencode, route, subagent, explore cheap, review cheap, code cheap, test cheap, delegate to cheap, use cheap model, use opencode go]
 argument-hint: "<role> \"<task>\" [--model <model>] [--profile <profile>]"
 effort: low
-version: 0.1.0
+version: 0.2.0
 origin: theonekit-model-router
 repository: The1Studio/theonekit-model-router
 module: mr-router
-protected: true
+protected: false
 ---
 
 ## Available Roles

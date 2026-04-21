@@ -1,4 +1,5 @@
 #!/usr/bin/env node
+// t1k-origin: kit=theonekit-model-router | repo=The1Studio/theonekit-model-router | module=null | protected=false
 // mr-metrics.cjs — PostToolUse hook for metrics collection
 // Captures tool usage from delegated sessions for analytics.
 // Only active when MR_SPAWNED=1 (set by mr-delegate.sh).

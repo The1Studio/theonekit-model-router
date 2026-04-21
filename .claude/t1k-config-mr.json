@@ -9,5 +9,11 @@
     },
     "roleOverrides": {},
     "budgetOverrides": {}
+  },
+  "_origin": {
+    "kit": "theonekit-model-router",
+    "repository": "The1Studio/theonekit-model-router",
+    "module": null,
+    "protected": false
   }
 }

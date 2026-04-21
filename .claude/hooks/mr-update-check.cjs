@@ -1,4 +1,5 @@
 #!/usr/bin/env node
+// t1k-origin: kit=theonekit-model-router | repo=The1Studio/theonekit-model-router | module=null | protected=false
 /**
  * mr-update-check.cjs — SessionStart hook
  * Checks for CCS and oc-go-cc updates periodically (max once per 24h).
