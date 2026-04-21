@@ -1,6 +1,14 @@
 ---
-name: mr-delegate
-description: Delegate tasks to cheaper/specialized AI models via OpenCode Go. Use when a task is self-contained and doesn't need Opus-level reasoning — exploration, docs, boilerplate code, reviews, tests.
+name: t1k:delegate
+description: "Delegate tasks to cheaper/specialized AI models via OpenCode Go. Use when a task is self-contained and doesn't need Opus-level reasoning — exploration, docs, boilerplate code, reviews, tests."
+keywords: [delegate, cheap model, opencode, route, subagent, explore cheap, review cheap, code cheap, test cheap, delegate to cheap, use cheap model, use opencode go]
+argument-hint: "<role> \"<task>\" [--model <model>] [--profile <profile>]"
+effort: low
+version: 0.1.0
+origin: theonekit-model-router
+repository: The1Studio/model-router
+module: mr-router
+protected: true
 ---
 
 ## Available Roles
