@@ -8,7 +8,7 @@ version: 0.3.0
 origin: theonekit-model-router
 repository: The1Studio/theonekit-model-router
 module: model-router
-protected: true
+protected: false
 ---
 
 ## How Model Selection Works

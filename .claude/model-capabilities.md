@@ -1,3 +1,10 @@
+---
+
+origin: theonekit-model-router
+repository: The1Studio/theonekit-model-router
+module: null
+protected: false
+---
 # Model Capabilities Guide
 
 > This file is read by the primary Claude agent to decide which model and provider to use for each delegation. When delegating via `/t1k:delegate`, choose the model that best fits the task requirements.

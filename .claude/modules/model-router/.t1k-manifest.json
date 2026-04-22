@@ -1,17 +1,17 @@
 {
-  "name": "theonekit-model-router",
-  "version": "0.1.0",
-  "repository": "The1Studio/theonekit-model-router",
+  "module": "model-router",
   "deletions": [
     "agents/model-router-mr-coder-cheap.md",
     "agents/model-router-mr-doc-scout.md",
     "agents/model-router-mr-doc-writer.md",
     "agents/model-router-mr-explorer-fast.md",
     "agents/model-router-mr-reviewer-deep.md",
-    "agents/model-router-mr-tester.md",
-    "modules/mr-router/module.json"
+    "agents/model-router-mr-tester.md"
   ],
-  "_generatedFields": [
-    "deletions"
-  ]
+  "_origin": {
+    "kit": "theonekit-model-router",
+    "repository": "The1Studio/theonekit-model-router",
+    "module": "model-router",
+    "protected": false
+  }
 }

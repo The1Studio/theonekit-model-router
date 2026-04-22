@@ -5,18 +5,54 @@
       "proxy": "oc-go-cc",
       "port": 3456,
       "models": {
-        "glm-5.1":       { "enabled": true, "tier": "premium" },
-        "glm-5":         { "enabled": true, "tier": "standard" },
-        "kimi-k2.6":     { "enabled": true, "tier": "standard" },
-        "kimi-k2.5":     { "enabled": true, "tier": "standard" },
-        "mimo-v2-pro":   { "enabled": true, "tier": "standard" },
-        "mimo-v2-omni":  { "enabled": true, "tier": "budget" },
-        "qwen3.6-plus":  { "enabled": true, "tier": "budget" },
-        "qwen3.5-plus":  { "enabled": true, "tier": "budget" },
-        "minimax-m2.7":  { "enabled": true, "tier": "standard" },
-        "minimax-m2.5":  { "enabled": true, "tier": "budget" }
+        "glm-5.1": {
+          "enabled": true,
+          "tier": "premium"
+        },
+        "glm-5": {
+          "enabled": true,
+          "tier": "standard"
+        },
+        "kimi-k2.6": {
+          "enabled": true,
+          "tier": "standard"
+        },
+        "kimi-k2.5": {
+          "enabled": true,
+          "tier": "standard"
+        },
+        "mimo-v2-pro": {
+          "enabled": true,
+          "tier": "standard"
+        },
+        "mimo-v2-omni": {
+          "enabled": true,
+          "tier": "budget"
+        },
+        "qwen3.6-plus": {
+          "enabled": true,
+          "tier": "budget"
+        },
+        "qwen3.5-plus": {
+          "enabled": true,
+          "tier": "budget"
+        },
+        "minimax-m2.7": {
+          "enabled": true,
+          "tier": "standard"
+        },
+        "minimax-m2.5": {
+          "enabled": true,
+          "tier": "budget"
+        }
       }
     }
   },
-  "_comment": "Edit this file or use `t1k router enable/disable <model>` to toggle models. Primary Claude agent reads model-capabilities.md to choose."
+  "_comment": "Edit this file or use `t1k router enable/disable <model>` to toggle models. Primary Claude agent reads model-capabilities.md to choose.",
+  "_origin": {
+    "kit": "theonekit-model-router",
+    "repository": "The1Studio/theonekit-model-router",
+    "module": null,
+    "protected": false
+  }
 }

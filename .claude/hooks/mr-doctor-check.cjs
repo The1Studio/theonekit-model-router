@@ -1,4 +1,5 @@
 #!/usr/bin/env node
+// t1k-origin: kit=theonekit-model-router | repo=The1Studio/theonekit-model-router | module=null | protected=false
 /**
  * mr-doctor-check.cjs — Doctor hook for model-router
  * Registered as a doctor check that t1k doctor discovers.

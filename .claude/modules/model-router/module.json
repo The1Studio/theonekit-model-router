@@ -1,6 +1,6 @@
 {
   "name": "model-router",
-  "version": "0.2.0",
+  "version": "0.3.0",
   "kit": "theonekit-model-router",
   "description": "Multi-model subagent delegation — route tasks to cheap models via OpenCode Go",
   "required": true,
@@ -121,6 +121,6 @@
     "kit": "theonekit-model-router",
     "repository": "The1Studio/theonekit-model-router",
     "module": "model-router",
-    "protected": true
+    "protected": false
   }
 }
