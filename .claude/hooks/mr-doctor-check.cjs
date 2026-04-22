@@ -14,6 +14,7 @@
 const { execSync } = require('child_process');
 const fs = require('fs');
 const path = require('path');
+const os = require('os');
 
 const results = [];
 let hasFailure = false;
@@ -32,7 +33,7 @@ function check(name, fn) {
 // 1. CCS installed
 check('ccs-installed', () => {
   try {
-    const ver = execSync('ccs --version 2>/dev/null', { encoding: 'utf8', timeout: 5000 }).trim().split('\n')[0];
+    const ver = execSync('ccs --version', { encoding: 'utf8', stdio: ['pipe', 'pipe', 'ignore'], timeout: 5000 }).trim().split('\n')[0];
     return { status: 'pass', message: ver };
   } catch {
     return { status: 'fail', message: 'CCS not found. Install: npm install -g @kaitranntt/ccs' };
@@ -41,10 +42,10 @@ check('ccs-installed', () => {
 
 // 2. oc-go-cc installed
 check('oc-go-cc-installed', () => {
-  const locations = ['oc-go-cc', '/tmp/oc-go-cc', path.join(process.env.HOME || '', '.local/bin/oc-go-cc')];
+  const locations = ['oc-go-cc', path.join(os.tmpdir(), 'oc-go-cc'), path.join(process.env.HOME || '', '.local/bin/oc-go-cc')];
   for (const loc of locations) {
     try {
-      const ver = execSync(`${loc} --version 2>/dev/null`, { encoding: 'utf8', timeout: 5000 }).trim();
+      const ver = execSync(`${loc} --version`, { encoding: 'utf8', stdio: ['pipe', 'pipe', 'ignore'], timeout: 5000 }).trim();
       return { status: 'pass', message: `${ver} (${loc})` };
     } catch { /* try next */ }
   }
@@ -80,7 +81,7 @@ check('ccs-profile', () => {
 // 6. Proxy health
 check('proxy-health', () => {
   try {
-    const resp = execSync('curl -s http://127.0.0.1:3456/health 2>/dev/null', { encoding: 'utf8', timeout: 3000 });
+    const resp = execSync('curl -s http://127.0.0.1:3456/health', { encoding: 'utf8', stdio: ['pipe', 'pipe', 'ignore'], timeout: 3000 });
     const data = JSON.parse(resp);
     if (data.status === 'ok') {
       return { status: 'pass', message: `Proxy running (${data.metrics?.requests_received || 0} requests served)` };

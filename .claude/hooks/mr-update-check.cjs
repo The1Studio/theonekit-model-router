@@ -39,8 +39,8 @@ try {
 
   // Check CCS
   try {
-    const installed = execSync('ccs --version 2>/dev/null', { encoding: 'utf8', timeout: 5000 }).trim().split('\n')[0];
-    const latest = execSync('npm view @kaitranntt/ccs version 2>/dev/null', { encoding: 'utf8', timeout: 10000 }).trim();
+    const installed = execSync('ccs --version', { encoding: 'utf8', stdio: ['pipe', 'pipe', 'ignore'], timeout: 5000 }).trim().split('\n')[0];
+    const latest = execSync('npm view @kaitranntt/ccs version', { encoding: 'utf8', stdio: ['pipe', 'pipe', 'ignore'], timeout: 10000 }).trim();
     const installedVer = installed.match(/v?([\d.]+)/)?.[1];
     if (installedVer && latest && installedVer !== latest) {
       updates.push(`CCS: ${installedVer} → ${latest} (npm update -g @kaitranntt/ccs)`);
@@ -49,9 +49,9 @@ try {
 
   // Check oc-go-cc
   try {
-    const installed = execSync('oc-go-cc --version 2>/dev/null || /tmp/oc-go-cc --version 2>/dev/null', { encoding: 'utf8', timeout: 5000 }).trim();
+    const installed = execSync('oc-go-cc --version || ' + path.join(os.tmpdir(), 'oc-go-cc') + ' --version', { encoding: 'utf8', stdio: ['pipe', 'pipe', 'ignore'], timeout: 5000 }).trim();
     const installedVer = installed.match(/v?([\d.]+)/)?.[1];
-    const latestTag = execSync('curl -fsSL -o /dev/null -w "%{redirect_url}" https://github.com/The1Studio/oc-go-cc/releases/latest 2>/dev/null', { encoding: 'utf8', timeout: 10000 }).trim();
+    const latestTag = execSync('curl -fsSL -o /dev/null -w "%{redirect_url}" https://github.com/The1Studio/oc-go-cc/releases/latest', { encoding: 'utf8', stdio: ['pipe', 'pipe', 'ignore'], timeout: 10000 }).trim();
     const latestVer = latestTag.match(/v?([\d.]+)/)?.[1];
     if (installedVer && latestVer && installedVer !== latestVer) {
       updates.push(`oc-go-cc: ${installedVer} → ${latestVer} (download from GitHub releases)`);

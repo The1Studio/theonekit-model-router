@@ -12,7 +12,7 @@ jobs:
 
       - name: Validate JSON files
         run: |
-          for f in .claude/t1k-modules.json .claude/modules/mr-router/module.json .claude/metadata.json .claude/settings.json .claude/t1k-activation-mr.json .claude/t1k-config-mr.json .claude/t1k-routing-mr.json package.json; do
+          for f in .claude/t1k-modules.json .claude/modules/model-router/module.json .claude/metadata.json .claude/settings.json .claude/t1k-activation-mr.json .claude/t1k-config-mr.json .claude/t1k-routing-mr.json package.json; do
             python3 -c "import json; json.load(open('$f'))" && echo "OK: $f" || { echo "FAIL: $f"; exit 1; }
           done
 
@@ -43,10 +43,10 @@ jobs:
           python3 -c "
           import json
           reg = json.load(open('.claude/t1k-modules.json'))
-          mod = json.load(open('.claude/modules/mr-router/module.json'))
-          assert reg['modules']['mr-router']['skills'] == mod['skills'], 'Skills mismatch'
-          assert reg['modules']['mr-router']['agents'] == mod['agents'], 'Agents mismatch'
-          for a in reg['modules']['mr-router']['agents']:
+          mod = json.load(open('.claude/modules/model-router/module.json'))
+          assert reg['modules']['model-router']['skills'] == mod['skills'], 'Skills mismatch'
+          assert reg['modules']['model-router']['agents'] == mod['agents'], 'Agents mismatch'
+          for a in reg['modules']['model-router']['agents']:
               assert open(f'.claude/agents/{a}.md'), f'Agent {a} missing'
           print('OK: registry consistent')
           "
