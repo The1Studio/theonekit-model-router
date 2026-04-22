@@ -32,9 +32,9 @@ jobs:
         run: |
           # Skill dir must be t1k-*
           ls .claude/skills/t1k-delegate/SKILL.md || { echo "FAIL: skill dir naming"; exit 1; }
-          # Agents must be mr-*
+          # Agents must be mr-* or model-router-mr-* (release action auto-prefixes)
           for f in .claude/agents/*.md; do
-            basename "$f" | grep -q "^mr-" || { echo "FAIL: agent naming $f"; exit 1; }
+            basename "$f" | grep -qE "^(model-router-)?mr-" || { echo "FAIL: agent naming $f"; exit 1; }
           done
           echo "OK: naming conventions"
 
@@ -46,7 +46,10 @@ jobs:
           mod = json.load(open('.claude/modules/model-router/module.json'))
           assert reg['modules']['model-router']['skills'] == mod['skills'], 'Skills mismatch'
           assert reg['modules']['model-router']['agents'] == mod['agents'], 'Agents mismatch'
+          import os
           for a in reg['modules']['model-router']['agents']:
-              assert open(f'.claude/agents/{a}.md'), f'Agent {a} missing'
+              unprefixed = f'.claude/agents/{a}.md'
+              prefixed = f'.claude/agents/model-router-{a}.md'
+              assert os.path.exists(unprefixed) or os.path.exists(prefixed), f'Agent {a} missing'
           print('OK: registry consistent')
           "
