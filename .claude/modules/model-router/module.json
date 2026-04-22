@@ -2,7 +2,7 @@
   "name": "model-router",
   "version": "0.3.0",
   "kit": "theonekit-model-router",
-  "description": "Multi-model subagent delegation — route tasks to cheap models via OpenCode Go",
+  "description": "Multi-model subagent delegation \u2014 route tasks to cheap models via OpenCode Go",
   "required": true,
   "dependencies": {},
   "crossKitDependencies": {},
@@ -29,12 +29,12 @@
     "t1k-delegate"
   ],
   "agents": [
-    "mr-explorer-fast",
-    "mr-doc-scout",
-    "mr-doc-writer",
-    "mr-coder-cheap",
-    "mr-reviewer-deep",
-    "mr-tester"
+    "model-router-mr-explorer-fast",
+    "model-router-mr-doc-scout",
+    "model-router-mr-doc-writer",
+    "model-router-mr-coder-cheap",
+    "model-router-mr-reviewer-deep",
+    "model-router-mr-tester"
   ],
   "activation": {
     "sessionBaseline": [],
