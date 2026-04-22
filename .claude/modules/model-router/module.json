@@ -1,6 +1,6 @@
 {
   "name": "model-router",
-  "version": "0.5.5",
+  "version": "0.5.6",
   "kit": "theonekit-model-router",
   "description": "Multi-model subagent delegation — route tasks to cheap models via OpenCode Go",
   "required": true,
