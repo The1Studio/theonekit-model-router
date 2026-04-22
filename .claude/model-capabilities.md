@@ -56,11 +56,21 @@ protected: false
 
 ## Providers
 
-| Provider | Status | Auth | Models |
-|----------|--------|------|--------|
-| **OpenCode Go** | Enabled | OC_GO_CC_API_KEY via oc-go-cc proxy | All above |
+| Provider | Status | Auth | Models | Endpoint |
+|----------|--------|------|--------|----------|
+| **OpenCode Go** | Enabled | OC_GO_CC_API_KEY via oc-go-cc proxy | GLM, Kimi, Qwen, MiMo, MiniMax | `localhost:3456` |
+| **Kimi (direct)** | Enabled | `gh auth token` (The1Studio org) | kimi-k2, kimi-k2.5, kimi-k2.6 | `ccs.the1studio.org` |
 
-> More providers can be added. Each provider needs a CCS profile or oc-go-cc config entry.
+### Provider selection guidelines
+
+| Scenario | Provider | Why |
+|----------|----------|-----|
+| Default (most tasks) | OpenCode Go | More models, local proxy, lower latency |
+| Kimi-specific tasks | Kimi direct | Native Kimi API, no translation layer, better tool_calls support |
+| OpenCode Go quota exhausted | Kimi direct | Fallback — independent quota |
+
+> To use Kimi direct: `--profile kimi --model kimi-k2.6`
+> Requires: `gh auth login` with The1Studio org membership.
 
 ## Cache behavior
 

@@ -2,7 +2,10 @@
 # model-router delegate script (mr-delegate.sh)
 # Usage: mr-delegate.sh <role> "<task>" [--profile <override>] [--model <override>]
 #
-# Spawns a CCS session via oc-go-cc proxy with safety flags enforced.
+# Spawns a Claude Code session via supported providers:
+#   - opencode-go: local oc-go-cc proxy (GLM, Kimi, Qwen, MiMo, MiniMax)
+#   - kimi: CCS CLIProxy via ccs.the1studio.org (Kimi K2/K2.5/K2.6)
+#
 # All CC context (CLAUDE.md, skills, hooks, permissions) inherited natively.
 #
 # SSOT: role → profile → model → budget mapping lives HERE.
@@ -81,8 +84,33 @@ case "$ROLE" in
     ;;
 esac
 
-# ─── P0: Auto-start oc-go-cc if needed ───
-if [[ "$PROFILE" == "opencode-go" ]]; then
+# ─── Provider setup ───
+CCS_ENDPOINT="${MR_CCS_ENDPOINT:-https://ccs.the1studio.org}"
+USE_DIRECT_CLAUDE=0
+
+if [[ "$PROFILE" == "kimi" ]]; then
+  # Kimi via CCS CLIProxy at ccs.the1studio.org — auth with GH token
+  MR_GH_TOKEN=$(gh auth token 2>/dev/null || cat "${HOME}/.model-router/.gh-token-cache" 2>/dev/null)
+  if [[ -z "$MR_GH_TOKEN" ]]; then
+    echo "ERROR: GitHub token required for kimi profile. Run: gh auth login" >&2
+    exit 1
+  fi
+  # Verify auth (uses cached result on server, no GitHub API spam)
+  if ! curl -s --max-time 5 -o /dev/null -w "%{http_code}" \
+    -H "Authorization: Bearer $MR_GH_TOKEN" \
+    "${CCS_ENDPOINT}/health" 2>/dev/null | grep -q "200"; then
+    echo "ERROR: Cannot reach CCS endpoint at ${CCS_ENDPOINT} or auth failed." >&2
+    echo "Hint: Ensure gh auth token is valid and you belong to The1Studio org." >&2
+    exit 1
+  fi
+  export ANTHROPIC_BASE_URL="${CCS_ENDPOINT}/api/provider/kimi"
+  export ANTHROPIC_AUTH_TOKEN="$MR_GH_TOKEN"
+  export ANTHROPIC_CUSTOM_MODEL_OPTION="$MODEL"
+  USE_DIRECT_CLAUDE=1
+  echo "[mr] Using kimi via ${CCS_ENDPOINT}" >&2
+
+elif [[ "$PROFILE" == "opencode-go" ]]; then
+  # OpenCode Go via local oc-go-cc proxy
   if ! curl -s http://127.0.0.1:3456/health > /dev/null 2>&1; then
     echo "[mr] Starting oc-go-cc proxy..." >&2
     if command -v oc-go-cc &>/dev/null; then
@@ -131,18 +159,35 @@ START_SEC=$(date +%s)
 
 echo "{\"id\":\"${CALL_ID}\",\"ts\":\"${START_TS}\",\"role\":\"${ROLE}\",\"profile\":\"${PROFILE}\",\"model\":\"${MODEL}\",\"task\":$(echo "$TASK" | head -c 200 | jq -Rs .),\"status\":\"start\"}" >> "$LOG_FILE"
 
-# ─── Build CCS command ───
-CCS_ARGS=(
-  "$PROFILE"
-  "-p" "$TASK"
-  "--agent" "$ROLE"
-  "--model" "$MODEL"
-  "--max-turns" "$TURNS"
-  "--permission-mode" "$MODE"
-  "--max-budget-usd" "$BUDGET"
-  "--output-format" "text"
-  "--disallowedTools" "Agent"
-)
+# ─── Build command ───
+if [[ "$USE_DIRECT_CLAUDE" == "1" ]]; then
+  # Direct claude with env vars already set (kimi, etc.)
+  CMD="claude"
+  CMD_ARGS=(
+    "-p" "$TASK"
+    "--agent" "$ROLE"
+    "--model" "$MODEL"
+    "--max-turns" "$TURNS"
+    "--permission-mode" "$MODE"
+    "--max-budget-usd" "$BUDGET"
+    "--output-format" "text"
+    "--disallowedTools" "Agent"
+  )
+else
+  # Via CCS profile (opencode-go, etc.)
+  CMD="ccs"
+  CMD_ARGS=(
+    "$PROFILE"
+    "-p" "$TASK"
+    "--agent" "$ROLE"
+    "--model" "$MODEL"
+    "--max-turns" "$TURNS"
+    "--permission-mode" "$MODE"
+    "--max-budget-usd" "$BUDGET"
+    "--output-format" "text"
+    "--disallowedTools" "Agent"
+  )
+fi
 
 # ─── P0: Set spawn marker ───
 export MR_SPAWNED=1
@@ -153,13 +198,13 @@ export MR_DELEGATE_PARENT_PID=$$
 TIMEOUT=300
 
 if command -v timeout &>/dev/null; then
-  timeout "$TIMEOUT" ccs "${CCS_ARGS[@]}" 2>/dev/null
+  timeout "$TIMEOUT" "$CMD" "${CMD_ARGS[@]}" 2>/dev/null
   EXIT=$?
 elif command -v gtimeout &>/dev/null; then
-  gtimeout "$TIMEOUT" ccs "${CCS_ARGS[@]}" 2>/dev/null
+  gtimeout "$TIMEOUT" "$CMD" "${CMD_ARGS[@]}" 2>/dev/null
   EXIT=$?
 else
-  ccs "${CCS_ARGS[@]}" 2>/dev/null
+  "$CMD" "${CMD_ARGS[@]}" 2>/dev/null
   EXIT=$?
 fi
 
