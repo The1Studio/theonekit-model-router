@@ -15,12 +15,15 @@
     "hooks": [
       "mr-spawn-guard.cjs",
       "mr-metrics.cjs",
-      "mr-update-check.cjs"
+      "mr-update-check.cjs",
+      "mr-doctor-check.cjs",
+      "mr-telemetry.cjs"
     ],
-    "fragments": [
+    ".": [
+      "providers-config.json",
+      "model-capabilities.md",
       "t1k-config-mr.json",
-      "t1k-activation-mr.json",
-      "t1k-routing-mr.json"
+      "settings.json"
     ]
   },
   "postInstall": "scripts/post-install.sh",
@@ -29,12 +32,12 @@
     "t1k-delegate"
   ],
   "agents": [
-    "model-router-mr-explorer-fast",
-    "model-router-mr-doc-scout",
-    "model-router-mr-doc-writer",
-    "model-router-mr-coder-cheap",
-    "model-router-mr-reviewer-deep",
-    "model-router-mr-tester"
+    "model-router-mr-explorer-fast.md",
+    "model-router-mr-doc-scout.md",
+    "model-router-mr-doc-writer.md",
+    "model-router-mr-coder-cheap.md",
+    "model-router-mr-reviewer-deep.md",
+    "model-router-mr-tester.md"
   ],
   "activation": {
     "sessionBaseline": [],
