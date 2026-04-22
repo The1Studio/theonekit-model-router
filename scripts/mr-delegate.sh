@@ -104,8 +104,7 @@ if [[ "$PROFILE" == "kimi" ]]; then
     exit 1
   fi
   export ANTHROPIC_BASE_URL="${CCS_ENDPOINT}/api/provider/kimi"
-  export ANTHROPIC_AUTH_TOKEN="$MR_GH_TOKEN"
-  export ANTHROPIC_CUSTOM_MODEL_OPTION="$MODEL"
+  export ANTHROPIC_API_KEY="$MR_GH_TOKEN"
   USE_DIRECT_CLAUDE=1
   echo "[mr] Using kimi via ${CCS_ENDPOINT}" >&2
 
