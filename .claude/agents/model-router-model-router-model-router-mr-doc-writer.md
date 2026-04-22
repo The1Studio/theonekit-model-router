@@ -1,5 +1,5 @@
 ---
-name: model-router-mr-doc-writer
+name: model-router-model-router-model-router-mr-doc-writer
 model: inherit
 description: Update documentation files per a spec. No code changes.
 tools: [Read, Grep, Glob, Edit, Write]

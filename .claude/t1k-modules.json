@@ -10,14 +10,7 @@
       "skills": [
         "t1k-delegate"
       ],
-      "agents": [
-        "model-router-mr-explorer-fast",
-        "model-router-mr-doc-scout",
-        "model-router-mr-doc-writer",
-        "model-router-mr-coder-cheap",
-        "model-router-mr-reviewer-deep",
-        "model-router-mr-tester"
-      ],
+      "agents": [],
       "activationFragment": "t1k-activation-model-router.json",
       "routingOverlay": {
         "explorer": "mr-explorer-fast",
