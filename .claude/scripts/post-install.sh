@@ -1,4 +1,5 @@
 #!/bin/bash
+# t1k-origin: kit=theonekit-model-router | repo=The1Studio/theonekit-model-router | module=null | protected=false
 # post-install.sh — runs after `t1k modules add model-router`
 # Auto-installs CCS, oc-go-cc, creates CCS profile, inits oc-go-cc config.
 # Idempotent — safe to re-run.
