@@ -74,7 +74,7 @@ echo "Installing agent definitions..."
 AGENTS_DIR=".claude/agents"
 mkdir -p "$AGENTS_DIR"
 COUNT=0
-for f in "$SRC/.claude/agents/"mr-*.md; do
+for f in "$SRC/.claude/agents/"model-router-mr-*.md; do
   [[ -f "$f" ]] || continue
   name=$(basename "$f")
   if [[ -f "$AGENTS_DIR/$name" ]] && [[ "$FORCE" != "--force" ]]; then
@@ -90,12 +90,12 @@ echo "  $COUNT agent(s) installed"
 # ─── Install skill ───
 echo ""
 echo "Installing skill..."
-SKILL_DIR=".claude/skills/model-router"
+SKILL_DIR=".claude/skills/t1k-delegate"
 mkdir -p "$SKILL_DIR"
 if [[ -f "$SKILL_DIR/SKILL.md" ]] && [[ "$FORCE" != "--force" ]]; then
   warn "Skill exists, skipping"
 else
-  cp "$SRC/.claude/skills/model-router/SKILL.md" "$SKILL_DIR/SKILL.md"
+  cp "$SRC/.claude/skills/t1k-delegate/SKILL.md" "$SKILL_DIR/SKILL.md"
   ok "Installed skill"
 fi
 
@@ -109,6 +109,39 @@ else
   cp "$SRC/scripts/mr-delegate.sh" "scripts/mr-delegate.sh"
   chmod +x "scripts/mr-delegate.sh"
   ok "Installed scripts/mr-delegate.sh"
+fi
+
+# ─── Install hooks ───
+echo ""
+echo "Installing hooks..."
+HOOKS_DIR=".claude/hooks"
+mkdir -p "$HOOKS_DIR"
+HOOK_COUNT=0
+for f in "$SRC/.claude/hooks/"mr-*.cjs; do
+  [[ -f "$f" ]] || continue
+  name=$(basename "$f")
+  if [[ -f "$HOOKS_DIR/$name" ]] && [[ "$FORCE" != "--force" ]]; then
+    warn "$name exists, skipping"
+  else
+    cp "$f" "$HOOKS_DIR/$name"
+    ok "Installed $name"
+    HOOK_COUNT=$((HOOK_COUNT + 1))
+  fi
+done
+echo "  $HOOK_COUNT hook(s) installed"
+
+# ─── Install providers-config ───
+echo ""
+echo "Installing providers config..."
+if [[ -f "$SRC/.claude/providers-config.json" ]]; then
+  if [[ -f ".claude/providers-config.json" ]] && [[ "$FORCE" != "--force" ]]; then
+    warn "providers-config.json exists, skipping"
+  else
+    cp "$SRC/.claude/providers-config.json" ".claude/providers-config.json"
+    ok "Installed providers-config.json"
+  fi
+else
+  warn "No providers-config.json in source"
 fi
 
 # ─── Setup oc-go-cc config ───
