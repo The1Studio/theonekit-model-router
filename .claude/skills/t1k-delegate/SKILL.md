@@ -4,65 +4,75 @@ description: "Delegate tasks to cheaper/specialized AI models via OpenCode Go. U
 keywords: [delegate, cheap model, opencode, route, subagent, explore cheap, review cheap, code cheap, test cheap, delegate to cheap, use cheap model, use opencode go]
 argument-hint: "<role> \"<task>\" [--model <model>] [--profile <profile>]"
 effort: low
-version: 0.2.0
+version: 0.3.0
 origin: theonekit-model-router
 repository: The1Studio/theonekit-model-router
-module: mr-router
-protected: false
+module: model-router
+protected: true
 ---
+
+## How Model Selection Works
+
+**You (Claude) decide which model to use.** Before delegating:
+
+1. Read `.claude/model-capabilities.md` for model strengths, costs, and guidelines
+2. Read `.claude/providers-config.json` to check which models/providers are enabled
+3. Choose the best model for the task (consider complexity, context size, cost)
+4. Pass your choice via `--model <model>` flag
+
+**Default models per role** are set in `scripts/mr-delegate.sh` but you can (and should) override when the task warrants a different model.
 
 ## Available Roles
 
-| Role | Model | Best for | Permissions | Budget |
-|------|-------|----------|-------------|--------|
-| `mr-explorer-fast` | qwen3.5-plus | File discovery, pattern search | Read-only | $0.30 |
-| `mr-doc-scout` | kimi-k2.5 | Doc audit, gap analysis | Read-only | $0.30 |
-| `mr-doc-writer` | kimi-k2.6 | Write/update documentation | Edit docs only | $2.00 |
-| `mr-coder-cheap` | kimi-k2.6 | Code implementation per plan | Full access | $2.00 |
-| `mr-reviewer-deep` | glm-5.1 | Security review, architecture analysis | Read-only + Bash | $1.00 |
-| `mr-tester` | qwen3.5-plus | Run tests, interpret results | Read-only + Bash | $0.50 |
+| Role | Default model | Permissions | Best for |
+|------|--------------|-------------|----------|
+| `mr-explorer-fast` | qwen3.5-plus | Read-only | File discovery, pattern search, codebase navigation |
+| `mr-doc-scout` | kimi-k2.5 | Read-only | Doc audit, gap analysis, stale section detection |
+| `mr-doc-writer` | kimi-k2.6 | Edit docs only | Write/update documentation, README, wiki |
+| `mr-coder-cheap` | kimi-k2.6 | Full access | Code implementation per plan, bug fixes, boilerplate |
+| `mr-reviewer-deep` | glm-5.1 | Read-only + Bash | Security review, architecture analysis, deep reasoning |
+| `mr-tester` | qwen3.5-plus | Read-only + Bash | Run test suite, interpret results, report failures |
 
 ## How to Delegate
 
 ```bash
-bash scripts/mr-delegate.sh <role> "<task description>"
+bash scripts/mr-delegate.sh <role> "<task>" [--model <model>]
 ```
 
-### Examples
+### Model selection examples
 
 ```bash
-# Explore codebase
-bash scripts/mr-delegate.sh mr-explorer-fast "Find all authentication-related files and list key functions"
+# Simple file search → cheapest model
+bash scripts/mr-delegate.sh mr-explorer-fast "list all .ts files" --model qwen3.5-plus
 
-# Audit documentation
-bash scripts/mr-delegate.sh mr-doc-scout "Scan all docs for outdated sections and missing cross-references"
+# Complex exploration → upgrade to better model
+bash scripts/mr-delegate.sh mr-explorer-fast "analyze auth architecture and map all dependencies" --model kimi-k2.6
 
-# Write docs
-bash scripts/mr-delegate.sh mr-doc-writer "Update README.md with the new installation instructions"
+# Large codebase review → long context model
+bash scripts/mr-delegate.sh mr-reviewer-deep "review entire src/ directory" --model minimax-m2.7
 
-# Implement code
-bash scripts/mr-delegate.sh mr-coder-cheap "Add input validation to UserController.create following existing patterns"
+# Quick boilerplate → cheap model
+bash scripts/mr-delegate.sh mr-coder-cheap "add standard error handling to all API routes" --model qwen3.6-plus
 
-# Review code
-bash scripts/mr-delegate.sh mr-reviewer-deep "Review src/auth/ for security vulnerabilities and OWASP Top 10"
-
-# Run tests
-bash scripts/mr-delegate.sh mr-tester "Run the test suite and report failures with likely causes"
+# Critical security review → best reasoning model
+bash scripts/mr-delegate.sh mr-reviewer-deep "audit auth module for OWASP Top 10" --model glm-5.1
 ```
 
-### Override model or profile
+### Model quick reference
 
-```bash
-# Use a different model
-bash scripts/mr-delegate.sh mr-coder-cheap "implement feature" --model glm-5.1
+| Need | Model | Why |
+|------|-------|-----|
+| Cheapest possible | `qwen3.5-plus` | 10K req/5hr, basic quality |
+| Best balance | `kimi-k2.6` | Good quality + reasonable cost |
+| Best reasoning | `glm-5.1` | Complex tasks, worth the cost |
+| Long context (1M) | `minimax-m2.7` | Large file analysis |
+| Fast prototyping | `mimo-v2-pro` | Quick code generation |
 
-# Use a different CCS profile (e.g. gemini, codex when available)
-bash scripts/mr-delegate.sh mr-explorer-fast "find auth files" --profile gemini
-```
+> Full details: read `.claude/model-capabilities.md`
 
 ## When to Delegate vs Keep
 
-**Delegate** (use mr-delegate):
+**Delegate** (use this skill):
 - Codebase exploration and file search
 - Documentation audit and writing
 - Boilerplate code generation
@@ -83,14 +93,15 @@ bash scripts/mr-delegate.sh mr-explorer-fast "find auth files" --profile gemini
 Every delegation enforces:
 - Tool whitelist per role (explorer can't edit, coder can't spawn subagents)
 - Permission mode (plan=read-only, acceptEdits=cwd only)
-- Max turns (hard stop)
+- Max turns (hard stop per role)
 - Budget cap (max USD per call)
 - Timeout (5 minutes default)
 - No nested delegation (MR_SPAWNED guard)
 - Write lock (only 1 write-capable agent at a time)
+- Telemetry (events sent to T1K cloud for monitoring)
 
-## Logs
+## Logs & Telemetry
 
-```
-~/.model-router/calls.jsonl
-```
+- Local logs: `~/.model-router/calls.jsonl`
+- Tool usage: `~/.model-router/tool-usage.jsonl`
+- Proxy telemetry: `~/.model-router/telemetry.jsonl` (WAL, flushed to cloud every 60s)
