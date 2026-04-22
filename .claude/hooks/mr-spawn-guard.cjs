@@ -7,7 +7,7 @@
 // When MR_SPAWNED=1 (set by mr-delegate.sh), this hook blocks any
 // Bash command that invokes mr-delegate.sh, preventing recursive delegation.
 
-const input = JSON.parse(require('fs').readFileSync('/dev/stdin', 'utf8'));
+const input = JSON.parse(require('fs').readFileSync(0, 'utf8'));
 
 // Only check Bash tool calls
 if (input.tool_name !== 'Bash') {

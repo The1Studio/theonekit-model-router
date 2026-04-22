@@ -12,7 +12,7 @@ const fs = require('fs');
 const path = require('path');
 
 try {
-  const input = JSON.parse(fs.readFileSync('/dev/stdin', 'utf8'));
+  const input = JSON.parse(fs.readFileSync(0, 'utf8'));
 
   const logDir = path.join(process.env.HOME || '/tmp', '.model-router');
   const logFile = path.join(logDir, 'tool-usage.jsonl');
