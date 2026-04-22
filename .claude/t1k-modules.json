@@ -11,12 +11,12 @@
         "t1k-delegate"
       ],
       "agents": [
-        "mr-explorer-fast",
-        "mr-doc-scout",
-        "mr-doc-writer",
-        "mr-coder-cheap",
-        "mr-reviewer-deep",
-        "mr-tester"
+        "mr-explorer-fast.md",
+        "mr-doc-scout.md",
+        "mr-doc-writer.md",
+        "mr-coder-cheap.md",
+        "mr-reviewer-deep.md",
+        "mr-tester.md"
       ],
       "activationFragment": "t1k-activation-model-router.json",
       "routingOverlay": {
