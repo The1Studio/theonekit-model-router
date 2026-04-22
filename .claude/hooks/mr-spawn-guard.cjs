@@ -7,6 +7,11 @@
 // When MR_SPAWNED=1 (set by mr-delegate.sh), this hook blocks any
 // Bash command that invokes mr-delegate.sh, preventing recursive delegation.
 
+// Only block in spawned sessions (MR_SPAWNED=1 set by mr-delegate.sh)
+if (process.env.MR_SPAWNED !== '1') {
+  process.exit(0);
+}
+
 const input = JSON.parse(require('fs').readFileSync(0, 'utf8'));
 
 // Only check Bash tool calls
@@ -16,8 +21,8 @@ if (input.tool_name !== 'Bash') {
 
 const command = input.tool_input?.command || '';
 
-// Block recursive delegation
-if (command.includes('mr-delegate') || command.includes('model-router')) {
+// Block recursive delegation attempts
+if (command.includes('mr-delegate') || command.includes('ccs ') || command.includes('/t1k:delegate')) {
   process.stderr.write('Blocked: recursive delegation not allowed in spawned session\n');
   process.exit(2); // exit 2 = block operation
 }
