@@ -42,15 +42,18 @@ jobs:
       - name: Validate registry consistency
         run: |
           python3 -c "
-          import json
+          import json, os
           reg = json.load(open('.claude/t1k-modules.json'))
           mod = json.load(open('.claude/modules/model-router/module.json'))
           assert reg['modules']['model-router']['skills'] == mod['skills'], 'Skills mismatch'
-          assert reg['modules']['model-router']['agents'] == mod['agents'], 'Agents mismatch'
-          import os
+          # Agents: normalize by stripping .md for comparison (module.json may have .md, registry may not)
+          reg_agents = sorted(a.replace('.md','') for a in reg['modules']['model-router']['agents'])
+          mod_agents = sorted(a.replace('.md','') for a in mod['agents'])
+          assert reg_agents == mod_agents, f'Agents mismatch: reg={reg_agents} mod={mod_agents}'
+          # Verify agent files exist on disk
           for a in reg['modules']['model-router']['agents']:
-              unprefixed = f'.claude/agents/{a}.md'
-              prefixed = f'.claude/agents/model-router-{a}.md'
-              assert os.path.exists(unprefixed) or os.path.exists(prefixed), f'Agent {a} missing'
+              base = a.replace('.md','')
+              candidates = [f'.claude/agents/{base}.md', f'.claude/agents/model-router-{base}.md']
+              assert any(os.path.exists(c) for c in candidates), f'Agent {a} missing'
           print('OK: registry consistent')
           "
