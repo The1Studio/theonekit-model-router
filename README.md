@@ -39,7 +39,7 @@ Check available providers: `curl -H "Authorization: Bearer $(gh auth token)" htt
 
 ```bash
 # Via TheOneKit
-t1k modules install model-router
+t1k modules add model-router
 
 # post-install.sh runs automatically:
 #   - Installs CCS + oc-go-cc

@@ -1,5 +1,5 @@
 #!/bin/bash
-# post-install.sh — runs after `t1k modules install model-router`
+# post-install.sh — runs after `t1k modules add model-router`
 # Auto-installs CCS, oc-go-cc, creates CCS profile, inits oc-go-cc config.
 # Idempotent — safe to re-run.
 

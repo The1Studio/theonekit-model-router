@@ -3,7 +3,7 @@
 ## P0 — Blocked on access
 
 ### 1. Apply theonekit-cli patch
-Register model-router kit so `t1k modules install model-router` works.
+Register model-router kit so `t1k modules add model-router` works.
 
 ```bash
 cd /path/to/theonekit-cli
@@ -12,7 +12,7 @@ git apply /tmp/theonekit-cli-model-router.patch
 git commit -m "feat: register theonekit-model-router kit"
 git push -u origin feat/register-model-router
 gh pr create --title "feat: register theonekit-model-router kit" \
-  --body "Enables: t1k modules install model-router"
+  --body "Enables: t1k modules add model-router"
 ```
 
 Patch adds `"model-router"` to `KitType` enum + `AVAILABLE_KITS` in `src/types/kit.ts`.
