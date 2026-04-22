@@ -2,7 +2,9 @@
   "name": "theonekit-model-router",
   "version": "0.1.0",
   "repository": "The1Studio/theonekit-model-router",
-  "deletions": [],
+  "deletions": [
+    "modules/mr-router/module.json"
+  ],
   "_generatedFields": [
     "deletions"
   ]

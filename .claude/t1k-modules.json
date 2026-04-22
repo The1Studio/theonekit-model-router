@@ -1,10 +1,10 @@
 {
   "registryVersion": 2,
   "kitName": "theonekit-model-router",
-  "_modulesGeneratedFrom": "module.json files \u2014 edit modules/*/module.json instead",
+  "_modulesGeneratedFrom": "module.json files — edit modules/*/module.json instead",
   "modules": {
     "model-router": {
-      "description": "Multi-model subagent delegation \u2014 route tasks to cheap models via OpenCode Go",
+      "description": "Multi-model subagent delegation — route tasks to cheap models via OpenCode Go",
       "required": true,
       "dependencies": [],
       "skills": [
