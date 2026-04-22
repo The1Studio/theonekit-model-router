@@ -134,6 +134,34 @@ check('delegate-script', () => {
   return { status: 'fail', message: 'mr-delegate.sh missing' };
 });
 
+// 10. GitHub auth (for CCS CLIProxy providers)
+check('gh-auth', () => {
+  try {
+    const token = execSync('gh auth token', { encoding: 'utf8', stdio: ['pipe', 'pipe', 'ignore'], timeout: 5000 }).trim();
+    if (token) {
+      return { status: 'pass', message: 'gh auth token available' };
+    }
+    return { status: 'warn', message: 'gh auth token empty' };
+  } catch {
+    return { status: 'warn', message: 'gh not authenticated. Run: gh auth login (needed for CCS CLIProxy providers)' };
+  }
+});
+
+// 11. CCS endpoint reachable
+check('ccs-endpoint', () => {
+  try {
+    const endpoint = 'https://ccs.the1studio.org/health';
+    const resp = execSync(`curl -s --max-time 5 ${endpoint}`, { encoding: 'utf8', stdio: ['pipe', 'pipe', 'ignore'], timeout: 8000 });
+    const data = JSON.parse(resp);
+    if (data.status === 'ok') {
+      return { status: 'pass', message: 'ccs.the1studio.org reachable' };
+    }
+    return { status: 'warn', message: 'CCS endpoint responded but status not ok' };
+  } catch {
+    return { status: 'warn', message: 'ccs.the1studio.org unreachable (CCS CLIProxy providers unavailable)' };
+  }
+});
+
 // Output as JSON for t1k doctor to parse
 console.log(JSON.stringify({ kit: 'theonekit-model-router', checks: results }, null, 2));
 

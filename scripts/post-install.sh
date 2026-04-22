@@ -74,19 +74,48 @@ else
 fi
 
 # ─── 4. API key check ───
-if [[ -z "${OC_GO_CC_API_KEY:-}" ]]; then
-  warn "OC_GO_CC_API_KEY not set."
+OC_CONFIG="${HOME}/.config/oc-go-cc/config.json"
+API_KEY_PERSISTED=0
+
+# Check if API key is already in config file
+if [[ -f "$OC_CONFIG" ]]; then
+  if python3 -c "import json; d=json.load(open('$OC_CONFIG')); assert d.get('api_key','')" 2>/dev/null; then
+    API_KEY_PERSISTED=1
+    ok "API key persisted in config"
+  fi
+fi
+
+if [[ "$API_KEY_PERSISTED" == "0" && -z "${OC_GO_CC_API_KEY:-}" ]]; then
+  warn "OpenCode Go API key not configured."
   echo "  Get your key: https://opencode.ai/go"
-  echo "  Then add to shell profile:"
-  echo "    export OC_GO_CC_API_KEY=sk-your-key-here"
   echo ""
-  echo "  Or set it now (temporary):"
   read -rp "  API Key (press Enter to skip): " API_KEY
   if [[ -n "$API_KEY" ]]; then
-    export OC_GO_CC_API_KEY="$API_KEY"
-    ok "API key set for this session"
-    echo "  To persist, add to ~/.zshrc or ~/.bashrc:"
-    echo "    export OC_GO_CC_API_KEY=$API_KEY"
+    # Persist into oc-go-cc config.json
+    if [[ -f "$OC_CONFIG" ]]; then
+      python3 -c "
+import json
+with open('$OC_CONFIG') as f: d = json.load(f)
+d['api_key'] = '$API_KEY'
+with open('$OC_CONFIG', 'w') as f: json.dump(d, f, indent=2)
+" 2>/dev/null && ok "API key saved to $OC_CONFIG" || {
+        export OC_GO_CC_API_KEY="$API_KEY"
+        warn "Could not save to config. Set env: export OC_GO_CC_API_KEY=$API_KEY"
+      }
+    else
+      export OC_GO_CC_API_KEY="$API_KEY"
+      warn "Config missing. Set env: export OC_GO_CC_API_KEY=$API_KEY"
+    fi
+  fi
+elif [[ "$API_KEY_PERSISTED" == "0" && -n "${OC_GO_CC_API_KEY:-}" ]]; then
+  # Env var set but not persisted — save it
+  if [[ -f "$OC_CONFIG" ]]; then
+    python3 -c "
+import json
+with open('$OC_CONFIG') as f: d = json.load(f)
+d['api_key'] = '${OC_GO_CC_API_KEY}'
+with open('$OC_CONFIG', 'w') as f: json.dump(d, f, indent=2)
+" 2>/dev/null && ok "API key persisted from env to config"
   fi
 fi
 
@@ -152,9 +181,21 @@ fi
 mkdir -p "${HOME}/.model-router"
 ok "Log directory: ~/.model-router/"
 
+# ─── 8. GitHub auth (for CCS CLIProxy providers) ───
+if command -v gh &>/dev/null && gh auth token &>/dev/null; then
+  ok "GitHub CLI authenticated (enables CCS CLIProxy providers)"
+else
+  warn "gh not authenticated. Run: gh auth login"
+  echo "  Needed for CCS CLIProxy providers (kimi, codex, etc.) via ccs.the1studio.org"
+fi
+
 echo ""
 echo "=== model-router ready ==="
 echo ""
 echo "Quick test:"
 echo "  bash scripts/mr-delegate.sh mr-explorer-fast \"list files in this project\""
+echo ""
+echo "Providers:"
+echo "  OpenCode Go (local):  --profile opencode-go (default)"
+echo "  Kimi (remote):        --profile kimi --model kimi-k2.6"
 echo ""

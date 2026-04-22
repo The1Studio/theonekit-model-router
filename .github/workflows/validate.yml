@@ -12,7 +12,7 @@ jobs:
 
       - name: Validate JSON files
         run: |
-          for f in .claude/t1k-modules.json .claude/modules/model-router/module.json .claude/metadata.json .claude/settings.json .claude/t1k-activation-mr.json .claude/t1k-config-mr.json .claude/t1k-routing-mr.json package.json; do
+          for f in .claude/t1k-modules.json .claude/modules/model-router/module.json .claude/metadata.json .claude/settings.json .claude/t1k-activation-mr.json .claude/t1k-config-mr.json .claude/t1k-routing-mr.json .claude/providers-config.json package.json; do
             python3 -c "import json; json.load(open('$f'))" && echo "OK: $f" || { echo "FAIL: $f"; exit 1; }
           done
 
@@ -27,6 +27,7 @@ jobs:
           node -c .claude/hooks/mr-spawn-guard.cjs && echo "OK: mr-spawn-guard.cjs"
           node -c .claude/hooks/mr-metrics.cjs && echo "OK: mr-metrics.cjs"
           node -c .claude/hooks/mr-update-check.cjs && echo "OK: mr-update-check.cjs"
+          node -c scripts/ccs-auth-proxy.mjs && echo "OK: ccs-auth-proxy.mjs"
 
       - name: Validate naming conventions
         run: |

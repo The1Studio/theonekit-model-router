@@ -1,6 +1,6 @@
-# model-router
+# theonekit-model-router
 
-Multi-model subagent system for Claude Code — delegate tasks to any AI model (GPT, Gemini, GLM, Kimi, Qwen, DeepSeek, etc.) as subagents with full Claude Code context inheritance.
+Multi-model subagent system for Claude Code — delegate tasks to any AI model as subagents with full Claude Code context inheritance.
 
 ## Problem
 
@@ -8,82 +8,92 @@ Claude Code only supports Claude models natively. There's no official way to use
 
 ## Solution
 
-**Spawned CC Session + CCS** — spawn separate `claude -p` processes via [CCS](https://github.com/kaitranntt/ccs) with different model providers. Each spawned session inherits 100% of Claude Code's context (CLAUDE.md, skills, hooks, permissions) while routing API calls to any provider.
-
-### How it works
+Spawn separate `claude -p` sessions with different model providers. Each spawned session inherits 100% of Claude Code's context while routing API calls to any provider.
 
 ```
 Claude Code main session (direct Anthropic, safe)
 │
-│  Delegate task to cheaper/specialized model
-│  via skill or MCP tool
-▼
-CCS spawns separate claude -p session:
-├─ ANTHROPIC_BASE_URL → CCS local proxy
-├─ ANTHROPIC_MODEL → target model (GLM, GPT, Gemini, ...)
-├─ Loads CLAUDE.md, skills, hooks, permissions ✅
-├─ Agent loop runs with non-Claude model
-└─ Returns result to main session
+│  /t1k:delegate mr-coder-cheap "implement feature X" --profile kimi
+│
+├─ mr-delegate.sh:
+│   ├─ ANTHROPIC_BASE_URL → provider endpoint
+│   ├─ ANTHROPIC_AUTH_TOKEN → auth token
+│   └─ claude -p "task" --agent mr-coder-cheap --model kimi-k2.6
+│
+└─ Result returned to main session
 ```
 
-### Key properties
+## Providers
 
-- **100% CC context inheritance** — CLAUDE.md, skills, hooks, permissions, agents all loaded natively
-- **Zero Anthropic ban risk** — main session untouched, spawned sessions never contact Anthropic
-- **13+ providers** — via CCS profiles (Gemini, Codex, Kimi, Qwen, GLM, OpenRouter, Ollama, etc.)
-- **Per-subagent model selection** — each role maps to a different CCS profile/model
-- **8-layer safety model** — tool whitelist, permission mode, hooks, max-turns, budget cap, timeout, loop detection
-- **Minimal code** — ~700 lines (MCP) or ~50 lines (skill + script)
+| Provider | Type | Models | Auth |
+|----------|------|--------|------|
+| **OpenCode Go** | Local proxy (oc-go-cc) | GLM-5.1, Kimi-K2.5/K2.6, Qwen, MiMo, MiniMax | API key |
+| **Kimi** | CCS CLIProxy | kimi-k2, kimi-k2.5, kimi-k2.6 | `gh auth token` |
+| **Codex** | CCS CLIProxy | gpt-5.1, o3 | `gh auth token` |
 
-## Documentation
+CCS CLIProxy providers route through `ccs.the1studio.org` with GitHub org auth (The1Studio members only).
 
-See the [Wiki](../../wiki) for comprehensive documentation:
+Check available providers: `curl -H "Authorization: Bearer $(gh auth token)" https://ccs.the1studio.org/providers`
 
-- [Approach](../../wiki/Approach) — chosen approach with evidence
-- [Architecture](../../wiki/Architecture) — system design
-- [Pros & Cons](../../wiki/Pros-and-Cons) — tradeoff analysis
-- [Implementation Plan](../../wiki/Implementation-Plan) — phased roadmap
-- [Rejected Approaches](../../wiki/Rejected-Approaches) — 9 alternatives evaluated
-- [References](../../wiki/References) — sources and prior art
-
-## Quick Start
-
-### Option A: Skill + Script (simplest, ship today)
+## Install
 
 ```bash
-# 1. Ensure CCS is installed with providers configured
-ccs config
+# Via TheOneKit
+t1k modules install model-router
 
-# 2. Copy agent definitions
-cp -r config/agents/ .claude/agents/
-
-# 3. Copy skill
-cp -r config/skill/ .claude/skills/model-router/
-
-# 4. Use in Claude Code
-# Claude will auto-delegate based on skill description, or:
-# "delegate exploring this codebase to a cheap model"
+# post-install.sh runs automatically:
+#   - Installs CCS + oc-go-cc
+#   - Creates CCS profile
+#   - Prompts for API key
+#   - Starts proxy
 ```
 
-### Option B: MCP Server (structured, metrics)
+## Usage
 
 ```bash
-# 1. Install
-bun install
+# Default (OpenCode Go, local)
+/t1k:delegate mr-explorer-fast "find auth files"
 
-# 2. Register MCP server
-# Add to .claude/settings.local.json:
-# { "mcpServers": { "model-router": { "type": "stdio", "command": "bun", "args": ["run", "src/index.ts"] } } }
+# Kimi direct (remote, via ccs.the1studio.org)
+/t1k:delegate mr-coder-cheap "implement feature" --profile kimi --model kimi-k2.6
 
-# 3. Use in Claude Code
-# Claude sees delegate() tool and can call it automatically
+# Override model for any role
+/t1k:delegate mr-reviewer-deep "security review" --model glm-5.1
 ```
+
+## Agent Roles
+
+| Role | Default Model | Mode | Use case |
+|------|--------------|------|----------|
+| `mr-explorer-fast` | qwen3.5-plus | plan | File discovery, grep, quick lookup |
+| `mr-doc-scout` | kimi-k2.5 | plan | Find and read documentation |
+| `mr-doc-writer` | kimi-k2.6 | acceptEdits | Write docs, README, comments |
+| `mr-coder-cheap` | kimi-k2.6 | acceptEdits | Implement features, boilerplate |
+| `mr-reviewer-deep` | glm-5.1 | plan | Code review, security audit |
+| `mr-tester` | qwen3.5-plus | plan | Test analysis, test writing |
+
+## Safety
+
+8-layer safety model:
+1. Tool whitelist per agent role
+2. Permission mode (plan/acceptEdits)
+3. `MR_SPAWNED` recursive delegation guard
+4. `--disallowedTools Agent` (no nested delegation)
+5. Max turns per role (25-50)
+6. Budget cap per role ($5-$10)
+7. Timeout (300s)
+8. Write lock (single writer at a time)
 
 ## Requirements
 
-- [Claude Code](https://claude.ai/code) (v2.1.63+)
-- [CCS](https://github.com/kaitranntt/ccs) (v7.50+) with at least one provider configured
-- [Bun](https://bun.sh) (for MCP server option)
+- [Claude Code](https://claude.ai/code)
+- [CCS](https://github.com/kaitranntt/ccs) (v7.50+)
+- [GitHub CLI](https://cli.github.com/) (`gh auth login` with The1Studio org)
+- [oc-go-cc](https://github.com/The1Studio/oc-go-cc) (auto-installed)
+
+## Documentation
+
+See the [Wiki](../../wiki) for comprehensive docs.
 
 ## License
 
