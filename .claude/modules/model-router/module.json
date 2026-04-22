@@ -32,12 +32,12 @@
     "t1k-delegate"
   ],
   "agents": [
-    "mr-explorer-fast",
-    "mr-doc-scout",
-    "mr-doc-writer",
-    "mr-coder-cheap",
-    "mr-reviewer-deep",
-    "mr-tester"
+    "model-router-mr-explorer-fast.md",
+    "model-router-mr-doc-scout.md",
+    "model-router-mr-doc-writer.md",
+    "model-router-mr-coder-cheap.md",
+    "model-router-mr-reviewer-deep.md",
+    "model-router-mr-tester.md"
   ],
   "activation": {
     "sessionBaseline": [],
