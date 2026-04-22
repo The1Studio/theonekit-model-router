@@ -181,12 +181,46 @@ fi
 mkdir -p "${HOME}/.model-router"
 ok "Log directory: ~/.model-router/"
 
-# ─── 8. GitHub auth (for CCS CLIProxy providers) ───
+# ─── 8. Remote CLIProxy (ccs.the1studio.org) ───
+CCS_CONFIG="${HOME}/.ccs/config.yaml"
+MR_CCS_ENDPOINT="ccs.the1studio.org"
+
 if command -v gh &>/dev/null && gh auth token &>/dev/null; then
-  ok "GitHub CLI authenticated (enables CCS CLIProxy providers)"
+  MR_GH_TOKEN=$(gh auth token 2>/dev/null)
+  ok "GitHub CLI authenticated"
+
+  # Auto-configure remote CLIProxy if not already set
+  if [[ -f "$CCS_CONFIG" ]]; then
+    REMOTE_ENABLED=$(grep -A1 "remote:" "$CCS_CONFIG" 2>/dev/null | grep "enabled:" | head -1 | grep -c "true" || true)
+    REMOTE_HOST=$(grep -A3 "remote:" "$CCS_CONFIG" 2>/dev/null | grep "host:" | head -1 | grep -c "$MR_CCS_ENDPOINT" || true)
+
+    if [[ "$REMOTE_HOST" == "1" && "$REMOTE_ENABLED" == "1" ]]; then
+      ok "Remote CLIProxy already configured ($MR_CCS_ENDPOINT)"
+    else
+      echo "  Configuring remote CLIProxy → $MR_CCS_ENDPOINT ..."
+      # Enable remote, set host, protocol, auth_token
+      sed -i.bak -e "/cliproxy_server:/,/fallback:/ {
+        s|enabled: false|enabled: true|
+        s|host: \"\"|host: \"$MR_CCS_ENDPOINT\"|
+        s|protocol: http$|protocol: https|
+        s|auth_token: \"\"|auth_token: \"$MR_GH_TOKEN\"|
+      }" "$CCS_CONFIG"
+      rm -f "${CCS_CONFIG}.bak"
+
+      # Verify
+      if grep -q "$MR_CCS_ENDPOINT" "$CCS_CONFIG" 2>/dev/null; then
+        ok "Remote CLIProxy configured → https://$MR_CCS_ENDPOINT"
+        echo "  Providers available: $(curl -s --max-time 5 -H "Authorization: Bearer $MR_GH_TOKEN" "https://$MR_CCS_ENDPOINT/providers" 2>/dev/null | python3 -c "import sys,json; d=json.load(sys.stdin); print(', '.join(p['name'] for p in d.get('providers',[]) if p.get('status')=='authenticated'))" 2>/dev/null || echo "check manually")"
+      else
+        warn "Could not configure remote CLIProxy. Set manually in ~/.ccs/config.yaml"
+      fi
+    fi
+  else
+    warn "CCS config not found. Run: ccs --version (to initialize)"
+  fi
 else
   warn "gh not authenticated. Run: gh auth login"
-  echo "  Needed for CCS CLIProxy providers (kimi, codex, etc.) via ccs.the1studio.org"
+  echo "  Needed for CCS CLIProxy providers (kimi, codex, etc.) via $MR_CCS_ENDPOINT"
 fi
 
 echo ""
@@ -197,5 +231,6 @@ echo "  bash scripts/mr-delegate.sh mr-explorer-fast \"list files in this projec
 echo ""
 echo "Providers:"
 echo "  OpenCode Go (local):  --profile opencode-go (default)"
-echo "  Kimi (remote):        --profile kimi --model kimi-k2.6"
+echo "  CCS remote:           --profile kimi --model kimi-k2.6"
+echo "  Check remote:         curl -sH \"Authorization: Bearer \$(gh auth token)\" https://$MR_CCS_ENDPOINT/providers | jq"
 echo ""
