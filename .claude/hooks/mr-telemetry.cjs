@@ -1,4 +1,5 @@
 #!/usr/bin/env node
+// t1k-origin: kit=theonekit-model-router | repo=The1Studio/theonekit-model-router | module=null | protected=false
 /**
  * mr-telemetry.cjs — PostToolUse hook: send model-router delegation events to T1K telemetry
  *

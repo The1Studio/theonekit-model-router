@@ -18,7 +18,7 @@
         "mr-reviewer-deep",
         "mr-tester"
       ],
-      "activationFragment": "t1k-activation-mr-router.json",
+      "activationFragment": "t1k-activation-model-router.json",
       "routingOverlay": {
         "explorer": "mr-explorer-fast",
         "reviewer": "mr-reviewer-deep",
