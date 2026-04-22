@@ -3,12 +3,12 @@
   "version": "0.1.0",
   "repository": "The1Studio/theonekit-model-router",
   "deletions": [
-    "agents/model-router-model-router-model-router-mr-coder-cheap.md",
-    "agents/model-router-model-router-model-router-mr-doc-scout.md",
-    "agents/model-router-model-router-model-router-mr-doc-writer.md",
-    "agents/model-router-model-router-model-router-mr-explorer-fast.md",
-    "agents/model-router-model-router-model-router-mr-reviewer-deep.md",
-    "agents/model-router-model-router-model-router-mr-tester.md",
+    "agents/model-router-mr-coder-cheap.md",
+    "agents/model-router-mr-doc-scout.md",
+    "agents/model-router-mr-doc-writer.md",
+    "agents/model-router-mr-explorer-fast.md",
+    "agents/model-router-mr-reviewer-deep.md",
+    "agents/model-router-mr-tester.md",
     "modules/mr-router/module.json"
   ],
   "_generatedFields": [
