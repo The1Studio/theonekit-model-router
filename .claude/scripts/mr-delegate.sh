@@ -1,4 +1,5 @@
 #!/bin/bash
+# t1k-origin: kit=theonekit-model-router | repo=The1Studio/theonekit-model-router | module=null | protected=false
 # model-router delegate script (mr-delegate.sh)
 # Usage: mr-delegate.sh <role> "<task>" [--profile <override>] [--model <override>]
 #

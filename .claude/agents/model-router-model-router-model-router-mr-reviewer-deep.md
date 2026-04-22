@@ -1,5 +1,5 @@
 ---
-name: model-router-mr-reviewer-deep
+name: model-router-model-router-model-router-mr-reviewer-deep
 model: inherit
 description: Read-only code review with Bash access for lint/grep/compile checks.
 tools: [Read, Grep, Glob, Bash]

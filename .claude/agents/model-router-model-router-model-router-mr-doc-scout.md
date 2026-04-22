@@ -1,5 +1,5 @@
 ---
-name: model-router-mr-doc-scout
+name: model-router-model-router-model-router-mr-doc-scout
 model: inherit
 description: Read-only audit of docs, wikis, and READMEs. Reports structure, gaps, and stale sections.
 tools: [Read, Grep, Glob]

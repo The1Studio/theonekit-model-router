@@ -1,4 +1,5 @@
 #!/bin/bash
+# t1k-origin: kit=theonekit-model-router | repo=The1Studio/theonekit-model-router | module=null | protected=false
 # mr-doctor.sh — health check for model-router prerequisites
 # Usage: bash scripts/mr-doctor.sh
 

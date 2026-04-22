@@ -1,5 +1,5 @@
 ---
-name: model-router-mr-explorer-fast
+name: model-router-model-router-model-router-mr-explorer-fast
 model: inherit
 description: Quick read-only codebase exploration. Reports paths and entry points concisely.
 tools: [Read, Grep, Glob]
