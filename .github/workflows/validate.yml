@@ -46,14 +46,15 @@ jobs:
           reg = json.load(open('.claude/t1k-modules.json'))
           mod = json.load(open('.claude/modules/model-router/module.json'))
           assert reg['modules']['model-router']['skills'] == mod['skills'], 'Skills mismatch'
-          # Agents: normalize by stripping .md for comparison (module.json may have .md, registry may not)
-          reg_agents = sorted(a.replace('.md','') for a in reg['modules']['model-router']['agents'])
-          mod_agents = sorted(a.replace('.md','') for a in mod['agents'])
-          assert reg_agents == mod_agents, f'Agents mismatch: reg={reg_agents} mod={mod_agents}'
-          # Verify agent files exist on disk
-          for a in reg['modules']['model-router']['agents']:
-              base = a.replace('.md','')
-              candidates = [f'.claude/agents/{base}.md', f'.claude/agents/model-router-{base}.md']
-              assert any(os.path.exists(c) for c in candidates), f'Agent {a} missing'
+          # Agents are in files.agents (not agents array) to avoid auto-prefix double-prefix
+          files_agents = mod.get('files', {}).get('agents', [])
+          for a in files_agents:
+              assert os.path.exists(f'.claude/agents/{a}'), f'Agent file {a} missing'
+          print(f'OK: {len(files_agents)} agent files verified')
+          # Verify agent files on disk match naming convention
+          import glob
+          disk_agents = glob.glob('.claude/agents/model-router-mr-*.md') + glob.glob('.claude/agents/mr-*.md')
+          assert len(disk_agents) >= 6, f'Expected 6+ agent files, found {len(disk_agents)}'
+          print(f'OK: {len(disk_agents)} agent files on disk')
           print('OK: registry consistent')
           "
