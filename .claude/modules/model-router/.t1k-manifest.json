@@ -1,12 +1,12 @@
 {
   "module": "model-router",
   "deletions": [
-    "agents/model-router-mr-coder-cheap.md",
-    "agents/model-router-mr-doc-scout.md",
-    "agents/model-router-mr-doc-writer.md",
-    "agents/model-router-mr-explorer-fast.md",
-    "agents/model-router-mr-reviewer-deep.md",
-    "agents/model-router-mr-tester.md"
+    "agents/model-router-model-router-model-router-mr-coder-cheap.md",
+    "agents/model-router-model-router-model-router-mr-doc-scout.md",
+    "agents/model-router-model-router-model-router-mr-doc-writer.md",
+    "agents/model-router-model-router-model-router-mr-explorer-fast.md",
+    "agents/model-router-model-router-model-router-mr-reviewer-deep.md",
+    "agents/model-router-model-router-model-router-mr-tester.md"
   ],
   "_origin": {
     "kit": "theonekit-model-router",
