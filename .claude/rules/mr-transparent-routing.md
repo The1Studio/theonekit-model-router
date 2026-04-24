@@ -20,8 +20,19 @@ If any condition is false, **ignore this rule entirely** and proceed with normal
 When a T1K skill (cook, fix, review, test, docs) resolves a role to a `model-router-mr-*` agent, delegate via Bash instead of spawning that agent:
 
 ```bash
-bash .claude/scripts/mr-delegate.sh <mr-role> "<task description>" --profile kimi --model kimi-k2.5
+bash .claude/scripts/mr-delegate.sh <mr-role> "<task description>" --provider <provider> --model <model>
 ```
+
+### Provider & Model Selection
+
+Before delegating, you MUST choose a provider and model:
+
+1. Check `modelRouter.roleOverrides` in `.claude/t1k-config-mr.json` first — if an override exists for this role, use it
+2. Otherwise, read `.claude/model-capabilities.md` for model strengths, costs, and suggestions
+3. Read `.claude/providers-config.json` for available providers and their endpoints
+4. Choose the best provider + model for the task (consider complexity, context size, cost)
+
+Pass your choice: `--provider <provider> --model <model>`
 
 ### Role Mapping
 
@@ -52,19 +63,19 @@ The Bash call returns the cheap model's text output directly. Use it as if the a
 - Retry with `/t1k:delegate` explicitly
 - Disable transparent routing: `t1k router disable-transparent`
 
-## Provider Selection
+## roleOverrides
 
-By default, delegate via `--profile kimi --model kimi-k2.5`. The user can override via `modelRouter.roleOverrides` in `t1k-config-mr.json`:
+Users can pin specific roles to a provider+model via `modelRouter.roleOverrides` in `t1k-config-mr.json`:
 
 ```json
 {
   "modelRouter": {
     "roleOverrides": {
-      "mr-reviewer-deep": { "profile": "kimi", "model": "kimi-k2.6" },
-      "mr-explorer-fast": { "profile": "opencode-go", "model": "qwen3.5-plus" }
+      "mr-reviewer-deep": { "provider": "kimi", "model": "kimi-k2.6" },
+      "mr-explorer-fast": { "provider": "opencode-go", "model": "qwen3.5-plus" }
     }
   }
 }
 ```
 
-When roleOverrides exist for a role, use the specified `--profile` and `--model` flags.
+When roleOverrides exist for a role, use the specified `--provider` and `--model` flags instead of AI selection.

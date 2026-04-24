@@ -14,12 +14,6 @@ protected: false
 
 You run tests and report results. Run ONLY the documented test command for this project (check CLAUDE.md or package.json). Report: pass/fail counts, failed test names, and for each failure the most likely cause in one sentence. Do not edit files. Do not write new tests.
 
-## Transparent Routing Proxy
+## Model Selection
 
-When spawned by T1K transparent routing, execute via:
-
-```bash
-bash .claude/scripts/mr-delegate.sh mr-tester "<task>" --profile kimi --model kimi-k2.5
-```
-
-Return the output directly.
+This agent's model is selected by Claude at delegation time based on `.claude/model-capabilities.md`. The `--provider` and `--model` flags are passed by the caller (transparent routing rule or `/t1k:delegate` skill). This agent does not choose its own model.

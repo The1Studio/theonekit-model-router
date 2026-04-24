@@ -1,11 +1,11 @@
 {
-  "ccsEndpoint": "https://ccs.the1studio.org",
   "discoveryUrl": "https://ccs.the1studio.org/providers",
   "auth": "gh-token",
   "providers": {
     "opencode-go": {
       "enabled": true,
       "type": "local-proxy",
+      "endpoint": "http://127.0.0.1:3456",
       "proxy": "oc-go-cc",
       "port": 3456,
       "models": {
@@ -53,7 +53,9 @@
     },
     "kimi": {
       "enabled": true,
-      "type": "ccs-cliproxy",
+      "type": "remote-proxy",
+      "endpoint": "https://ccs.the1studio.org/api/provider/kimi",
+      "auth": "gh-token",
       "models": {
         "kimi-k2.6": {
           "enabled": true,
@@ -71,7 +73,9 @@
     },
     "codex": {
       "enabled": true,
-      "type": "ccs-cliproxy",
+      "type": "remote-proxy",
+      "endpoint": "https://ccs.the1studio.org/api/provider/codex",
+      "auth": "gh-token",
       "models": {
         "gpt-5.1": {
           "enabled": true,
@@ -84,7 +88,7 @@
       }
     }
   },
-  "_comment": "ccsEndpoint + discoveryUrl used by mr-delegate.sh. Providers with type=ccs-cliproxy route through ccs.the1studio.org auth proxy. Use GET /providers to see what's authenticated on remote.",
+  "_comment": "endpoint is the ANTHROPIC_BASE_URL value used by mr-delegate.sh. Providers with type=remote-proxy route through ccs.the1studio.org auth proxy. Use GET /providers to see what's authenticated on remote.",
   "_origin": {
     "kit": "theonekit-model-router",
     "repository": "The1Studio/theonekit-model-router",

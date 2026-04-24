@@ -7,7 +7,7 @@ protected: false
 ---
 # Model Capabilities Guide
 
-> This file is read by the primary Claude agent to decide which model and provider to use for each delegation. When delegating via `/t1k:delegate`, choose the model that best fits the task requirements.
+> This file is read by the primary Claude agent to decide which provider and model to use for each delegation. When delegating via `/t1k:delegate` or transparent routing, choose the model that best fits the task requirements.
 
 ## Available Models (OpenCode Go)
 
@@ -35,16 +35,18 @@ protected: false
 | **Complex** (architecture analysis, security audit, deep reasoning) | `glm-5.1` | Best reasoning, worth the cost |
 | **Long context** (analyze large codebase, read many files) | `minimax-m2.7` | 1M context window |
 
-### By agent role (defaults, can override)
+### By agent role (suggestions)
 
-| Role | Default model | Override when |
-|------|--------------|---------------|
+| Role | Suggested model | Override when |
+|------|----------------|---------------|
 | `mr-explorer-fast` | `qwen3.5-plus` | Complex codebase → `kimi-k2.6` |
 | `mr-doc-scout` | `kimi-k2.5` | Large docs set → `minimax-m2.7` |
 | `mr-doc-writer` | `kimi-k2.6` | Technical docs → `glm-5.1` |
 | `mr-coder-cheap` | `kimi-k2.6` | Simple boilerplate → `qwen3.5-plus` |
 | `mr-reviewer-deep` | `glm-5.1` | Quick scan → `kimi-k2.6` |
 | `mr-tester` | `qwen3.5-plus` | Complex test analysis → `kimi-k2.6` |
+
+These are **suggestions**, not defaults. You choose the best model per task.
 
 ### Known limitations
 
@@ -58,8 +60,9 @@ protected: false
 
 | Provider | Status | Auth | Models | Endpoint |
 |----------|--------|------|--------|----------|
-| **OpenCode Go** | Enabled | OC_GO_CC_API_KEY via oc-go-cc proxy | GLM, Kimi, Qwen, MiMo, MiniMax | `localhost:3456` |
-| **Kimi (direct)** | Enabled | `gh auth token` (The1Studio org) | kimi-k2, kimi-k2.5, kimi-k2.6 | `ccs.the1studio.org` |
+| **OpenCode Go** | Enabled | OC_GO_CC_API_KEY via oc-go-cc proxy | GLM, Kimi, Qwen, MiMo, MiniMax | `http://127.0.0.1:3456` |
+| **Kimi (direct)** | Enabled | `gh auth token` (The1Studio org) | kimi-k2, kimi-k2.5, kimi-k2.6 | `ccs.the1studio.org/api/provider/kimi` |
+| **Codex** | Enabled | `gh auth token` (The1Studio org) | gpt-5.1, o3 | `ccs.the1studio.org/api/provider/codex` |
 
 ### Provider selection guidelines
 
@@ -68,9 +71,10 @@ protected: false
 | Default (most tasks) | OpenCode Go | More models, local proxy, lower latency |
 | Kimi-specific tasks | Kimi direct | Native Kimi API, no translation layer, better tool_calls support |
 | OpenCode Go quota exhausted | Kimi direct | Fallback — independent quota |
+| GPT/o3 tasks | Codex | OpenAI models for comparison or specific needs |
 
-> To use Kimi direct: `--profile kimi --model kimi-k2.6`
-> Requires: `gh auth login` with The1Studio org membership.
+> Usage: `--provider kimi --model kimi-k2.6`
+> Requires: `gh auth login` with The1Studio org membership (for kimi/codex providers).
 
 ## Cache behavior
 

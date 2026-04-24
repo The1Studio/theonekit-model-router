@@ -14,12 +14,6 @@ protected: false
 
 You scan documentation. Report: file inventory, outdated sections, missing cross-refs, broken links, coverage gaps. Do not edit. Do not write.
 
-## Transparent Routing Proxy
+## Model Selection
 
-When spawned by T1K transparent routing, execute via:
-
-```bash
-bash .claude/scripts/mr-delegate.sh mr-doc-scout "<task>" --profile kimi --model kimi-k2.5
-```
-
-Return the output directly.
+This agent's model is selected by Claude at delegation time based on `.claude/model-capabilities.md`. The `--provider` and `--model` flags are passed by the caller (transparent routing rule or `/t1k:delegate` skill). This agent does not choose its own model.

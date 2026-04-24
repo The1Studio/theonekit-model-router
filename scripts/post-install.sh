@@ -1,4 +1,5 @@
 #!/bin/bash
+# t1k-origin: kit=theonekit-model-router | repo=The1Studio/theonekit-model-router | module=null | protected=false
 # post-install.sh — runs after `t1k modules add model-router`
 # Auto-installs CCS, oc-go-cc, creates CCS profile, inits oc-go-cc config.
 # Idempotent — safe to re-run.
@@ -227,10 +228,11 @@ echo ""
 echo "=== model-router ready ==="
 echo ""
 echo "Quick test:"
-echo "  bash scripts/mr-delegate.sh mr-explorer-fast \"list files in this project\""
+echo "  bash scripts/mr-delegate.sh mr-explorer-fast \"list files\" --provider opencode-go --model qwen3.5-plus"
 echo ""
 echo "Providers:"
-echo "  OpenCode Go (local):  --profile opencode-go (default)"
-echo "  CCS remote:           --profile kimi --model kimi-k2.6"
+echo "  OpenCode Go (local):  --provider opencode-go"
+echo "  Kimi (remote):        --provider kimi"
+echo "  Codex (remote):       --provider codex"
 echo "  Check remote:         curl -sH \"Authorization: Bearer \$(gh auth token)\" https://$MR_CCS_ENDPOINT/providers | jq"
 echo ""
