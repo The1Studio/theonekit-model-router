@@ -1,4 +1,6 @@
 {
+  "registryVersion": 1,
+  "kitName": "theonekit-model-router",
   "priority": 92,
   "description": "Model-router transparent routing overlay. When mode=transparent, these agents delegate to cheap models via mr-delegate.sh. Priority 92 overrides core (p10) and kit-wide (p90).",
   "roles": {

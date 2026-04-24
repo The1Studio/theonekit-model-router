@@ -1,4 +1,6 @@
 {
+  "registryVersion": 1,
+  "kitName": "theonekit-model-router",
   "modelRouter": {
     "enabled": false,
     "mode": "explicit",
