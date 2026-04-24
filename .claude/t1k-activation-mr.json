@@ -1,4 +1,7 @@
 {
+  "registryVersion": 1,
+  "kitName": "theonekit-model-router",
+  "priority": 91,
   "activations": [
     {
       "keywords": [
