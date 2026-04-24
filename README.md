@@ -1,76 +1,116 @@
 # theonekit-model-router
 
-Multi-model subagent system for Claude Code — delegate tasks to any AI model as subagents with full Claude Code context inheritance.
+Multi-model subagent system for Claude Code — delegate tasks to cheaper AI models with full context inheritance.
 
 ## Problem
 
-Claude Code only supports Claude models natively. There's no official way to use other AI models as subagents while preserving the full Claude Code ecosystem (CLAUDE.md, skills, hooks, permissions, tools).
+Claude Code uses Claude Opus for everything, including simple tasks like file exploration, docs writing, and boilerplate code. This is expensive and wasteful.
 
 ## Solution
 
-Spawn separate `claude -p` sessions with different model providers. Each spawned session inherits 100% of Claude Code's context while routing API calls to any provider.
+Spawn separate `claude -p` sessions routed to cheaper models (Kimi, GLM, Qwen, etc.) while inheriting 100% of Claude Code's context (CLAUDE.md, skills, hooks, permissions, tools).
 
-```
-Claude Code main session (direct Anthropic, safe)
-│
-│  /t1k:delegate mr-coder-cheap "implement feature X" --profile kimi
-│
-├─ mr-delegate.sh:
-│   ├─ ANTHROPIC_BASE_URL → provider endpoint
-│   ├─ ANTHROPIC_AUTH_TOKEN → auth token
-│   └─ claude -p "task" --agent mr-coder-cheap --model kimi-k2.6
-│
-└─ Result returned to main session
-```
+Two modes:
 
-## Providers
-
-| Provider | Type | Models | Auth |
-|----------|------|--------|------|
-| **OpenCode Go** | Local proxy (oc-go-cc) | GLM-5.1, Kimi-K2.5/K2.6, Qwen, MiMo, MiniMax | API key |
-| **Kimi** | CCS CLIProxy | kimi-k2, kimi-k2.5, kimi-k2.6 | `gh auth token` |
-| **Codex** | CCS CLIProxy | gpt-5.1, o3 | `gh auth token` |
-
-CCS CLIProxy providers route through `ccs.the1studio.org` with GitHub org auth (The1Studio members only).
-
-Check available providers: `curl -H "Authorization: Bearer $(gh auth token)" https://ccs.the1studio.org/providers`
+| Mode | How | Cost |
+|------|-----|------|
+| **Explicit** (default) | `/t1k:delegate mr-coder-cheap "task"` | Only when you ask |
+| **Transparent** | `/t1k:cook "task"` auto-delegates | Automatic for mapped roles |
 
 ## Install
 
 ```bash
-# Via TheOneKit
-t1k modules add model-router
+# 1. Login GitHub (The1Studio org required)
+gh auth login
 
-# post-install.sh runs automatically:
-#   - Installs CCS + oc-go-cc
-#   - Creates CCS profile
-#   - Prompts for API key
-#   - Starts proxy
+# 2. Init project with model-router kit
+t1k init --kit model-router
+
+# post-install auto-configures:
+#   - CCS + remote CLIProxy (ccs.the1studio.org)
+#   - API keys + providers
 ```
 
 ## Usage
 
+### Explicit Delegation (Scenario 2)
+
+Manually delegate specific tasks to cheaper models:
+
 ```bash
-# Default (OpenCode Go, local)
-/t1k:delegate mr-explorer-fast "find auth files"
+# Explore codebase with cheap model
+/t1k:delegate mr-explorer-fast "find all auth-related files"
 
-# Kimi direct (remote, via ccs.the1studio.org)
-/t1k:delegate mr-coder-cheap "implement feature" --profile kimi --model kimi-k2.6
+# Code review with Kimi
+/t1k:delegate mr-reviewer-deep "security review of src/auth.ts" --profile kimi --model kimi-k2.6
 
-# Override model for any role
-/t1k:delegate mr-reviewer-deep "security review" --model glm-5.1
+# Write docs
+/t1k:delegate mr-doc-writer "update README with new API endpoints"
+
+# Implement feature
+/t1k:delegate mr-coder-cheap "implement login form validation" --profile kimi
 ```
+
+### Transparent Routing (Scenario 3)
+
+Enable once, then T1K skills auto-delegate to cheap models:
+
+```bash
+# Enable transparent routing
+t1k router enable-transparent
+
+# Now these auto-delegate to cheap models:
+/t1k:cook "implement feature X"      # → mr-coder-cheap (Kimi K2.6)
+/t1k:review "review auth module"     # → mr-reviewer-deep (Kimi K2.6)
+/t1k:test "run test suite"           # → mr-tester (Kimi K2.5)
+/t1k:docs "update API docs"          # → mr-doc-writer (Kimi K2.6)
+
+# Complex tasks still use Claude (planner, debugger, git-manager)
+
+# Disable when needed
+t1k router disable-transparent
+```
+
+**How it works:** Routing overlay (priority 92) maps T1K roles → model-router agents. A rule file checks `t1k-config-mr.json` mode — if transparent, delegates via `mr-delegate.sh` instead of spawning Claude agents.
 
 ## Agent Roles
 
-| Role | Default Model | Mode | Use case |
-|------|--------------|------|----------|
-| `mr-explorer-fast` | qwen3.5-plus | plan | File discovery, grep, quick lookup |
-| `mr-doc-scout` | kimi-k2.5 | plan | Find and read documentation |
-| `mr-doc-writer` | kimi-k2.6 | acceptEdits | Write docs, README, comments |
-| `mr-coder-cheap` | kimi-k2.6 | acceptEdits | Implement features, boilerplate |
-| `mr-reviewer-deep` | glm-5.1 | plan | Code review, security audit |
-| `mr-tester` | qwen3.5-plus | plan | Test analysis, test writing |
+| Role | Default Model | Mode | Delegates for |
+|------|--------------|------|---------------|
+| `mr-explorer-fast` | kimi-k2.5 | read-only | File discovery, codebase exploration |
+| `mr-doc-scout` | kimi-k2.5 | read-only | Find and audit documentation |
+| `mr-doc-writer` | kimi-k2.6 | write | Write docs, README, comments |
+| `mr-coder-cheap` | kimi-k2.6 | write | Implement features, boilerplate |
+| `mr-reviewer-deep` | kimi-k2.6 | read-only | Code review, security audit |
+| `mr-tester` | kimi-k2.5 | read-only | Run tests, interpret results |
+
+## Providers
+
+| Provider | Models | Auth | Endpoint |
+|----------|--------|------|----------|
+| **Kimi (direct)** | kimi-k2, k2.5, k2.6 | `gh auth token` | ccs.the1studio.org |
+| **Codex** | gpt-5.1, o3 | `gh auth token` | ccs.the1studio.org |
+| **OpenCode Go** | GLM, Qwen, MiMo, MiniMax | API key | localhost:3456 |
+
+Check available: `curl -sH "Authorization: Bearer $(gh auth token)" https://ccs.the1studio.org/providers | jq`
+
+## Architecture
+
+```
+/t1k:cook "implement feature X" (transparent mode)
+  │
+  ├─ T1K routing: implementer → mr-coder-cheap (p92 > core p10)
+  ├─ Rule: mode=transparent → delegate via mr-delegate.sh
+  │
+  ├─ mr-delegate.sh:
+  │   ├─ gh auth token → validate The1Studio org
+  │   ├─ ANTHROPIC_BASE_URL=ccs.the1studio.org/api/provider/kimi
+  │   └─ claude -p "task" --agent mr-coder-cheap --model kimi-k2.6
+  │       ↓
+  │   Cloudflare Tunnel → Auth Proxy → CLIProxy → Kimi API
+  │
+  └─ Result returned to main session
+```
 
 ## Safety
 
@@ -87,13 +127,19 @@ t1k modules add model-router
 ## Requirements
 
 - [Claude Code](https://claude.ai/code)
-- [CCS](https://github.com/kaitranntt/ccs) (v7.50+)
 - [GitHub CLI](https://cli.github.com/) (`gh auth login` with The1Studio org)
-- [oc-go-cc](https://github.com/The1Studio/oc-go-cc) (auto-installed)
+- [TheOneKit CLI](https://github.com/The1Studio/theonekit-cli) (`t1k`)
+
+CCS + oc-go-cc are auto-installed by post-install.
 
 ## Documentation
 
-See the [Wiki](../../wiki) for comprehensive docs.
+See the [Wiki](../../wiki) for comprehensive docs:
+- [Architecture](../../wiki/Architecture) — system design + CCS CLIProxy flow
+- [CCS Integration](../../wiki/CCS-Integration) — auth proxy, providers, remote CLIProxy
+- [Safety Model](../../wiki/Safety-Model) — 8-layer protection
+- [Agent Roster](../../wiki/Agent-Roster) — all roles with capabilities
+- [Telemetry](../../wiki/Telemetry) — event tracking + analytics
 
 ## License
 
