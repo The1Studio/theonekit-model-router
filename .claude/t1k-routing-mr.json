@@ -1,14 +1,11 @@
 {
-  "routing": {
-    "description": "Maps T1K command roles to model-router agent roles. Only active when modelRouter.mode is 'transparent'.",
-    "mappings": {
-      "explorer": "model-router-mr-explorer-fast",
-      "reviewer": "model-router-mr-reviewer-deep",
-      "doc-writer": "model-router-mr-doc-writer",
-      "doc-scout": "model-router-mr-doc-scout",
-      "coder": "model-router-mr-coder-cheap",
-      "tester": "model-router-mr-tester"
-    }
+  "priority": 92,
+  "description": "Model-router transparent routing overlay. When mode=transparent, these agents delegate to cheap models via mr-delegate.sh. Priority 92 overrides core (p10) and kit-wide (p90).",
+  "roles": {
+    "implementer": "model-router-mr-coder-cheap",
+    "reviewer": "model-router-mr-reviewer-deep",
+    "tester": "model-router-mr-tester",
+    "docs-manager": "model-router-mr-doc-writer"
   },
   "_origin": {
     "kit": "theonekit-model-router",

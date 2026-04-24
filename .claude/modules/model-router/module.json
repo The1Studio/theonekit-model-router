@@ -27,6 +27,9 @@
       "model-router-mr-reviewer-deep.md",
       "model-router-mr-tester.md"
     ],
+    "rules": [
+      "mr-transparent-routing.md"
+    ],
     ".": [
       "providers-config.json",
       "model-capabilities.md",
