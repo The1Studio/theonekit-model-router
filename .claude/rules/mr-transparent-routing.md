@@ -1,7 +1,7 @@
 ---
 origin: theonekit-model-router
 repository: The1Studio/theonekit-model-router
-module: model-router
+module: null
 protected: false
 ---
 # Model Router — Transparent Routing
